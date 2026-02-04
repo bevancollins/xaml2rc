@@ -29,6 +29,20 @@ void resource::from_xaml(const pugi::xml_node& xaml, [[maybe_unused]] YGNodeRef 
     }
   }
 
+  auto padding = xaml.attribute("Padding");
+  if (padding) {
+    auto padding_sv = std::string_view{padding.value()};
+    if (padding_sv.find_first_of(',') != std::string_view::npos) {
+      auto padding_array = parse_quad(padding.value());
+      YGNodeStyleSetPadding(node, YGEdgeLeft,   padding_array[0]);
+      YGNodeStyleSetPadding(node, YGEdgeRight,  padding_array[1]);
+      YGNodeStyleSetPadding(node, YGEdgeTop,    padding_array[2]);
+      YGNodeStyleSetPadding(node, YGEdgeBottom, padding_array[3]);
+    } else {
+      YGNodeStyleSetPadding(node, YGEdgeAll, padding.as_float());
+    }
+  }
+
   auto enabled = xaml.attribute("IsEnabled").as_bool(true);
   if (!enabled)
     style_.push_back("WS_DISABLED");
