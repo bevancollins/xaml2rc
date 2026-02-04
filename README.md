@@ -10,3 +10,4 @@ Generates a win32 resource file (.rc) from a XAML file (.xaml). This allows you 
 
 * [pugixml](https://pugixml.org/)
 * [yoga](https://www.yogalayout.dev/)
+* [wil](https://github.com/microsoft/wil)

@@ -1,27 +1,37 @@
-find_package(yoga CONFIG REQUIRED)
 find_package(pugixml CONFIG REQUIRED)
+find_package(wil CONFIG REQUIRED)
+find_package(yoga CONFIG REQUIRED)
 
 add_executable(xaml2rc
-  control.cpp
-  control.hpp
+  checkbox.cpp
+  checkbox.hpp
+  common_text_control.cpp
+  common_text_control.hpp
   dialogex.cpp
   dialogex.hpp
+  edittext.cpp
+  edittext.hpp
   flexibox.cpp
   flexibox.hpp
+  ltext.cpp
+  ltext.hpp
   main.cpp
   pushbutton.cpp
   pushbutton.hpp
+  resource.cpp
+  resource.hpp
   xamlimporter.cpp
   xamlimporter.hpp
 )
 
 target_compile_features(xaml2rc
   PRIVATE
-    cxx_std_20
+    cxx_std_23
 )
 
 target_link_libraries(xaml2rc
   PRIVATE
-    yoga::yogacore
     pugixml::pugixml
+    yoga::yogacore
+    WIL::WIL
 )

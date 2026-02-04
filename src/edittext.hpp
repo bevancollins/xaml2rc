@@ -2,9 +2,8 @@
 
 #include "resource.hpp"
 
-class flexibox : public resource {
+class edittext : public resource {
 public:
   std::string_view resource_class() const override;
   void output(YGNodeConstRef node, const resource::font_metrics& fm, std::ostream& os) const override;
-  void from_xaml(const pugi::xml_node& xaml, YGNodeRef node) override;
 };
