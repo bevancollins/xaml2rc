@@ -44,5 +44,23 @@ YGNodeRef xamlimporter::parse_xaml(const pugi::xml_node& xaml, std::optional<YGN
   for (auto& xml_node_child : xaml.children())
     parse_xaml(xml_node_child, node, resources);
 
+  // nodes with children can't have a measure function
+  auto child_count = YGNodeGetChildCount(node);
+  if (!child_count) {
+    YGNodeSetMeasureFunc(node, [](
+          YGNodeConstRef node,
+          float width,
+          YGMeasureMode width_mode,
+          float height,
+          YGMeasureMode height_mode)->YGSize {
+        auto r = reinterpret_cast<resource*>(YGNodeGetContext(node));
+        if (r)
+          return r->measure(width, width_mode, height, height_mode);
+        else
+          return {width, height};
+      }
+    );
+  }
+
   return node;
 }

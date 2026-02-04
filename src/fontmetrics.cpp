@@ -48,3 +48,11 @@ int font_metrics::dip_to_dlu_x(float x) const {
 int font_metrics::dip_to_dlu_y(float y) const {
   return std::lround((y * 8.0f) / base_unit_y_);
 }
+
+float font_metrics::dlu_to_dip_x(int x) const {
+  return x * base_unit_x_ / 4.0f;
+}
+
+float font_metrics::dlu_to_dip_y(int y) const {
+  return y * base_unit_y_ / 8.0f;
+}

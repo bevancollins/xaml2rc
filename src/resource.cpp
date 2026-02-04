@@ -33,6 +33,16 @@ void resource::from_xaml(const pugi::xml_node& xaml, [[maybe_unused]] YGNodeRef 
     style_.push_back("NOT WS_VISIBLE");
 }
 
+YGSize resource::measure(float width, YGMeasureMode width_mode, float height, YGMeasureMode height_mode) {
+  if (width_mode == YGMeasureModeAtMost)
+    width = 0;
+
+  if (height_mode == YGMeasureModeAtMost)
+    height = 0;
+
+  return {width, height};
+}
+
 std::string resource::x(YGNodeConstRef node) const {
   return std::to_string(font_metrics::instance().dip_to_dlu_x(YGNodeLayoutGetLeft(node)));
 }
