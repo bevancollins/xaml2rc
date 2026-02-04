@@ -1,5 +1,6 @@
 #include "resource.hpp"
 #include <ranges>
+#include "fontmetrics.hpp"
 
 void resource::from_xaml(const pugi::xml_node& xaml, [[maybe_unused]] YGNodeRef node) {
   auto name = xaml.attribute("x:Name");
@@ -32,28 +33,20 @@ void resource::from_xaml(const pugi::xml_node& xaml, [[maybe_unused]] YGNodeRef 
     style_.push_back("NOT WS_VISIBLE");
 }
 
-std::string resource::x(YGNodeConstRef node, const resource::font_metrics& fm) const {
-  return std::to_string(dip_to_dlu_x(YGNodeLayoutGetLeft(node), fm));
+std::string resource::x(YGNodeConstRef node) const {
+  return std::to_string(font_metrics::instance().dip_to_dlu_x(YGNodeLayoutGetLeft(node)));
 }
 
-std::string resource::y(YGNodeConstRef node, const resource::font_metrics& fm) const {
-  return std::to_string(dip_to_dlu_y(YGNodeLayoutGetTop(node), fm));
+std::string resource::y(YGNodeConstRef node) const {
+  return std::to_string(font_metrics::instance().dip_to_dlu_y(YGNodeLayoutGetTop(node)));
 }
 
-std::string resource::width(YGNodeConstRef node, const resource::font_metrics& fm) const {
-  return std::to_string(dip_to_dlu_x(YGNodeLayoutGetWidth(node), fm));
+std::string resource::width(YGNodeConstRef node) const {
+  return std::to_string(font_metrics::instance().dip_to_dlu_x(YGNodeLayoutGetWidth(node)));
 }
 
-std::string resource::height(YGNodeConstRef node, const resource::font_metrics& fm) const {
-  return std::to_string(dip_to_dlu_y(YGNodeLayoutGetHeight(node), fm));
-}
-
-int resource::dip_to_dlu_x(float x, const resource::font_metrics& fm) const {
-  return std::lround((x * 4.0f) / fm.base_unit_x);
-}
-
-int resource::dip_to_dlu_y(float y, const resource::font_metrics& fm) const {
-  return std::lround((y * 8.0f) / fm.base_unit_y);
+std::string resource::height(YGNodeConstRef node) const {
+  return std::to_string(font_metrics::instance().dip_to_dlu_y(YGNodeLayoutGetHeight(node)));
 }
 
 std::string resource::join_strings(const std::vector<std::string>& strings) const {

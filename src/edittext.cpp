@@ -5,8 +5,8 @@ std::string_view edittext::resource_class() const {
   return "EDITTEXT";
 }
 
-void edittext::output(YGNodeConstRef node, const resource::font_metrics& fm, std::ostream& os) const {
-  os << std::format("{} {}, {}, {}, {}, {}", resource_class(), id_, x(node, fm), y(node, fm), width(node, fm), height(node, fm));
+void edittext::output(YGNodeConstRef node, std::ostream& os) const {
+  os << std::format("{} {}, {}, {}, {}, {}", resource_class(), id_, x(node), y(node), width(node), height(node));
 
   if (!style_.empty())
     os << std::format(", {}", style());

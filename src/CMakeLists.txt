@@ -11,6 +11,8 @@ add_executable(xaml2rc
   dialogex.hpp
   edittext.cpp
   edittext.hpp
+  fontmetrics.cpp
+  fontmetrics.hpp
   flexibox.cpp
   flexibox.hpp
   ltext.cpp

@@ -5,8 +5,8 @@ std::string_view dialogex::resource_class() const {
   return "DIALOGEX";
 }
 
-void dialogex::output(YGNodeConstRef node, const resource::font_metrics& fm, std::ostream& os) const {
-  os << std::format("{} {} {}, {}, {}, {}\n", id_, resource_class(), x(node, fm), y(node, fm), width(node, fm), height(node, fm));
+void dialogex::output(YGNodeConstRef node, std::ostream& os) const {
+  os << std::format("{} {} {}, {}, {}, {}\n", id_, resource_class(), x(node), y(node), width(node), height(node));
   os << std::format("CAPTION \"{}\"\n", caption_);
 
   if (!style_.empty())

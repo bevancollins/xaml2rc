@@ -4,7 +4,7 @@ std::string_view flexibox::resource_class() const {
   return "";
 }
 
-void flexibox::output([[maybe_unused]] YGNodeConstRef node, [[maybe_unused]] const resource::font_metrics& fm, [[maybe_unused]] std::ostream& os) const {
+void flexibox::output([[maybe_unused]] YGNodeConstRef node, [[maybe_unused]] std::ostream& os) const {
 }
 
 void flexibox::from_xaml(const pugi::xml_node& xaml, YGNodeRef node) {

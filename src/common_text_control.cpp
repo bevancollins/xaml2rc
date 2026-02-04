@@ -1,8 +1,8 @@
 #include "common_text_control.hpp"
 #include <format>
 
-void common_text_control::output(YGNodeConstRef node, const resource::font_metrics& fm, std::ostream& os) const {
-  os << std::format("{} \"{}\", {}, {}, {}, {}, {}", resource_class(), text_, id_, x(node, fm), y(node, fm), width(node, fm), height(node, fm));
+void common_text_control::output(YGNodeConstRef node, std::ostream& os) const {
+  os << std::format("{} \"{}\", {}, {}, {}, {}, {}", resource_class(), text_, id_, x(node), y(node), width(node), height(node));
 
   if (!style_.empty())
     os << std::format(", {}", style());
