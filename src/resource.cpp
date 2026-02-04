@@ -17,11 +17,16 @@ void resource::from_xaml(const pugi::xml_node& xaml, [[maybe_unused]] YGNodeRef 
 
   auto margin = xaml.attribute("Margin");
   if (margin) {
-    auto margin_array = parse_quad(margin.value());
-    YGNodeStyleSetMargin(node, YGEdgeLeft,   margin_array[0]);
-    YGNodeStyleSetMargin(node, YGEdgeRight,  margin_array[1]);
-    YGNodeStyleSetMargin(node, YGEdgeTop,    margin_array[2]);
-    YGNodeStyleSetMargin(node, YGEdgeBottom, margin_array[3]);
+    auto margin_sv = std::string_view{margin.value()};
+    if (margin_sv.find_first_of(',') != std::string_view::npos) {
+      auto margin_array = parse_quad(margin.value());
+      YGNodeStyleSetMargin(node, YGEdgeLeft,   margin_array[0]);
+      YGNodeStyleSetMargin(node, YGEdgeRight,  margin_array[1]);
+      YGNodeStyleSetMargin(node, YGEdgeTop,    margin_array[2]);
+      YGNodeStyleSetMargin(node, YGEdgeBottom, margin_array[3]);
+    } else {
+      YGNodeStyleSetMargin(node, YGEdgeAll, margin.as_float());
+    }
   }
 
   auto enabled = xaml.attribute("IsEnabled").as_bool(true);
