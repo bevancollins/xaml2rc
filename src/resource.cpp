@@ -52,7 +52,7 @@ void resource::from_xaml(const pugi::xml_node& xaml, [[maybe_unused]] YGNodeRef 
     style_.push_back("NOT WS_VISIBLE");
 }
 
-YGSize resource::measure(float width, YGMeasureMode width_mode, float height, YGMeasureMode height_mode) {
+YGSize resource::measure([[maybe_unused]] YGNodeConstRef node, float width, YGMeasureMode width_mode, float height, YGMeasureMode height_mode) {
   if (width_mode == YGMeasureModeAtMost)
     width = 0;
 

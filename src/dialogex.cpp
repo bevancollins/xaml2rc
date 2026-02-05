@@ -15,7 +15,7 @@ void dialogex::output(YGNodeConstRef node, std::ostream& os) const {
   if (!extended_style_.empty())
     os << std::format("EXSTYLE {}\n", extended_style());
 
-  os << std::format("FONT {}, \"{}\", {}, {}, {}\n", font_size_, font_face_, font_weight_, font_italic_ ? 1 : 0, font_char_set_);
+  os << std::format("FONT {}, \"{}\", {}, {}, {:#x}\n", font_size_, font_face_, font_weight_, font_italic_ ? 1 : 0, font_char_set_);
 }
 
 void dialogex::from_xaml(const pugi::xml_node& xaml, YGNodeRef node) {

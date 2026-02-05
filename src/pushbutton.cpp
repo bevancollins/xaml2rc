@@ -17,7 +17,7 @@ void pushbutton::from_xaml(const pugi::xml_node& xaml, YGNodeRef node) {
     id_ = "IDCANCEL";
 }
 
-YGSize pushbutton::measure(float width, YGMeasureMode width_mode, float height, YGMeasureMode height_mode) {
+YGSize pushbutton::measure([[maybe_unused]] YGNodeConstRef node, float width, YGMeasureMode width_mode, float height, YGMeasureMode height_mode) {
   if (width_mode != YGMeasureModeExactly)
     width = font_metrics::instance().dlu_to_dip_x(default_width_dlu);
 
