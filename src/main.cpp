@@ -28,9 +28,8 @@ void init_font_metrics(YGNodeRef root) {
   dialogex* dialog{};
   auto root_context = YGNodeGetContext(root);
   if (root_context) {
-    auto r = reinterpret_cast<resource*>(root_context);
-    if (r->resource_class() == "DIALOGEX")
-      dialog = reinterpret_cast<dialogex*>(r);
+    auto r = static_cast<resource*>(root_context);
+    dialog = dynamic_cast<dialogex*>(r);
   }
   if (!dialog)
     throw std::runtime_error("unable to locate DIALOGEX");
