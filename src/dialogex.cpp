@@ -6,7 +6,7 @@ std::string_view dialogex::resource_class() const {
   return "DIALOGEX";
 }
 
-void dialogex::output(YGNodeConstRef node, std::ostream& os) const {
+void dialogex::to_rc(YGNodeConstRef node, std::ostream& os) const {
   os << std::format("{} {} {}, {}, {}, {}\n", id_, resource_class(), x(node), y(node), width(node), height(node));
   os << std::format("CAPTION \"{}\"\n", caption_);
 

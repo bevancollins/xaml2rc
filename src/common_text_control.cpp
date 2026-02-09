@@ -1,7 +1,7 @@
 #include "common_text_control.hpp"
 #include <format>
 
-void common_text_control::output(YGNodeConstRef node, std::ostream& os) const {
+void common_text_control::to_rc(YGNodeConstRef node, std::ostream& os) const {
   os << std::format("{} \"{}\", {}, {}, {}, {}, {}", resource_class(), text_, id_, x(node), y(node), width(node), height(node));
 
   if (!style_.empty())

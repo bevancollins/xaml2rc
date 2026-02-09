@@ -6,7 +6,7 @@ std::string_view edittext::resource_class() const {
   return "EDITTEXT";
 }
 
-void edittext::output(YGNodeConstRef node, std::ostream& os) const {
+void edittext::to_rc(YGNodeConstRef node, std::ostream& os) const {
   os << std::format("{} {}, {}, {}, {}, {}", resource_class(), id_, x(node), y(node), width(node), height(node));
 
   if (!style_.empty())
