@@ -1,6 +1,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <ostream>
+#include <fstream>
 #include <yoga/Yoga.h>
 #include "xamlimporter.hpp"
 #include "resource.hpp"
@@ -28,7 +29,16 @@ int main(int argc, char** argv) {
 
     YGNodeCalculateLayout(root, YGUndefined, YGUndefined, YGDirectionLTR);
 
-    output_nodes(root, std::cout);
+    std::ostream* out{};
+    std::ofstream file_out;
+    if (argc >= 3) {
+      file_out.exceptions(std::ifstream::failbit);
+      file_out.open(argv[2]);
+      out = &file_out;
+    } else {
+      out = &std::cout;
+    }
+    output_nodes(root, *out);
 
     return EXIT_SUCCESS;
 
