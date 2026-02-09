@@ -4,8 +4,6 @@
 #include <yoga/Yoga.h>
 #include "xamlimporter.hpp"
 #include "resource.hpp"
-#include "dialogex.hpp"
-#include "fontmetrics.hpp"
 
 void output_nodes(YGNodeRef node, std::ostream& os) {
   auto c = reinterpret_cast<resource*>(YGNodeGetContext(node));
@@ -23,26 +21,10 @@ void output_nodes(YGNodeRef node, std::ostream& os) {
     os << "END\n";
 }
 
-void init_font_metrics(YGNodeRef root) {
-  // the root node should be for the dialogex
-  dialogex* dialog{};
-  auto root_context = YGNodeGetContext(root);
-  if (root_context) {
-    auto r = static_cast<resource*>(root_context);
-    dialog = dynamic_cast<dialogex*>(r);
-  }
-  if (!dialog)
-    throw std::runtime_error("unable to locate DIALOGEX");
-
-  font_metrics::instance().initialise(dialog->font_face().c_str(), dialog->font_size(), dialog->font_weight(), dialog->font_italic(), dialog->font_char_set());
-}
-
 int main(int argc, char** argv) {
   try {
     xamlimporter importer;
     auto [root, resources] = importer.import(argv[1]);
-
-    init_font_metrics(root);
 
     YGNodeCalculateLayout(root, YGUndefined, YGUndefined, YGDirectionLTR);
 

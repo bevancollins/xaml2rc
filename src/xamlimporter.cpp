@@ -5,6 +5,7 @@
 #include "dialogex.hpp"
 #include "edittext.hpp"
 #include "flexibox.hpp"
+#include "fontmetrics.hpp"
 #include "ltext.hpp"
 #include "pushbutton.hpp"
 
@@ -26,20 +27,23 @@ YGNodeRef xamlimporter::parse_xaml(const pugi::xml_node& xaml, std::optional<YGN
   YGNodeRef node{};
 
   std::string_view name{ xaml.name() };
-  if (name == "Window")
+  if (name == "Window") {
     node = parse_resource<dialogex>(xaml, parent, resources);
-  else if (name == "StackPanel")
+    auto dialog = reinterpret_cast<dialogex*>(YGNodeGetContext(node));
+    font_metrics::instance().initialise(dialog->font_face().c_str(), dialog->font_size(), dialog->font_weight(), dialog->font_italic(), dialog->font_char_set());
+  } else if (name == "StackPanel") {
     node = parse_resource<flexibox>(xaml, parent, resources);
-  else if (name == "Button")
+  } else if (name == "Button") {
     node = parse_resource<pushbutton>(xaml, parent, resources);
-  else if (name == "CheckBox")
+  } else if (name == "CheckBox") {
     node = parse_resource<checkbox>(xaml, parent, resources);
-  else if (name == "Label")
+  } else if (name == "Label") {
     node = parse_resource<ltext>(xaml, parent, resources);
-  else if (name == "TextBox")
+  } else if (name == "TextBox") {
     node = parse_resource<edittext>(xaml, parent, resources);
-  else
+  } else {
     return {};
+  }
 
   for (auto& xml_node_child : xaml.children())
     parse_xaml(xml_node_child, node, resources);
