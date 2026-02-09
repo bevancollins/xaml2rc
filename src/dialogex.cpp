@@ -1,5 +1,6 @@
 #include "dialogex.hpp"
 #include <format>
+#include "fontmetrics.hpp"
 
 std::string_view dialogex::resource_class() const {
   return "DIALOGEX";
@@ -18,8 +19,8 @@ void dialogex::output(YGNodeConstRef node, std::ostream& os) const {
   os << std::format("FONT {}, \"{}\", {}, {}, {:#x}\n", font_size_, font_face_, font_weight_, font_italic_ ? 1 : 0, font_char_set_);
 }
 
-void dialogex::from_xaml(const pugi::xml_node& xaml, YGNodeRef node) {
-  resource::from_xaml(xaml, node);
+YGNodeRef dialogex::from_xaml(const pugi::xml_node& xaml, std::optional<YGNodeRef> parent) {
+  auto node = resource::from_xaml(xaml, parent);
 
   auto title = xaml.attribute("Title");
   if (title)
@@ -61,24 +62,8 @@ void dialogex::from_xaml(const pugi::xml_node& xaml, YGNodeRef node) {
   auto top_most = xaml.attribute("Topmost").as_bool(false);
   if (top_most)
     extended_style_.push_back("WS_EX_TOPMOST");
-}
 
-std::string dialogex::font_face() const {
-  return font_face_;
-}
+  font_metrics::instance().initialise(font_face_.c_str(), font_size_, font_weight_, font_italic_, font_char_set_);
 
-int dialogex::font_size() const {
-  return font_size_;
-}
-
-int dialogex::font_weight() const {
-  return font_weight_;
-}
-
-bool dialogex::font_italic() const {
-  return font_italic_;
-}
-
-int dialogex::font_char_set() const {
-  return font_char_set_;
+  return node;
 }

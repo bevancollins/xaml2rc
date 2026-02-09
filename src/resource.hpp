@@ -1,6 +1,7 @@
 #pragma once
 
 #include <array>
+#include <optional>
 #include <ostream>
 #include <string_view>
 #include <string>
@@ -12,7 +13,7 @@ class resource {
 public:
   virtual std::string_view resource_class() const = 0;
   virtual void output(YGNodeConstRef node, std::ostream& os) const = 0;
-  virtual void from_xaml(const pugi::xml_node& xaml, YGNodeRef node);
+  virtual YGNodeRef from_xaml(const pugi::xml_node& xaml, std::optional<YGNodeRef> parent);
   virtual YGSize measure(YGNodeConstRef node, float width, YGMeasureMode width_mode, float height, YGMeasureMode height_mode);
 
 protected:

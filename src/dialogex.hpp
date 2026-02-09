@@ -8,13 +8,7 @@ class dialogex : public resource {
 public:
   std::string_view resource_class() const override;
   void output(YGNodeConstRef node, std::ostream& os) const override;
-  void from_xaml(const pugi::xml_node& xaml, YGNodeRef node) override;
-
-  std::string font_face() const;
-  int font_size() const;
-  int font_weight() const;
-  bool font_italic() const;
-  int font_char_set() const;
+  YGNodeRef from_xaml(const pugi::xml_node& xaml, std::optional<YGNodeRef> parent) override;
 
 private:
   std::string caption_;

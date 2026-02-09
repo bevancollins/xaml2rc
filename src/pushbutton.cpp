@@ -5,8 +5,8 @@ std::string_view pushbutton::resource_class() const {
   return "PUSHBUTTON";
 }
 
-void pushbutton::from_xaml(const pugi::xml_node& xaml, YGNodeRef node) {
-  common_text_control::from_xaml(xaml, node);
+YGNodeRef pushbutton::from_xaml(const pugi::xml_node& xaml, std::optional<YGNodeRef> parent) {
+  auto node = common_text_control::from_xaml(xaml, parent);
 
   auto is_default = xaml.attribute("IsDefault");
   if (is_default.as_bool() && id_.empty())
@@ -15,6 +15,8 @@ void pushbutton::from_xaml(const pugi::xml_node& xaml, YGNodeRef node) {
   auto is_cancel = xaml.attribute("IsCancel");
   if (is_cancel.as_bool() && id_.empty())
     id_ = "IDCANCEL";
+
+  return node;
 }
 
 YGSize pushbutton::measure([[maybe_unused]] YGNodeConstRef node, float width, YGMeasureMode width_mode, float height, YGMeasureMode height_mode) {

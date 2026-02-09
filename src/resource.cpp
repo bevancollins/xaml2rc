@@ -2,7 +2,14 @@
 #include <ranges>
 #include "fontmetrics.hpp"
 
-void resource::from_xaml(const pugi::xml_node& xaml, [[maybe_unused]] YGNodeRef node) {
+YGNodeRef resource::from_xaml(const pugi::xml_node& xaml, std::optional<YGNodeRef> parent) {
+  auto node = YGNodeNew();
+  if (parent) {
+    auto child_index = YGNodeGetChildCount(parent.value());
+    YGNodeInsertChild(parent.value(), node, child_index);
+  }
+  YGNodeSetContext(node, this);
+
   auto name = xaml.attribute("x:Name");
   if (name)
     id_ = name.value();
@@ -50,6 +57,8 @@ void resource::from_xaml(const pugi::xml_node& xaml, [[maybe_unused]] YGNodeRef 
   auto visibility = std::string_view{ xaml.attribute("Visibility").value() };
   if (visibility == "Hidden")
     style_.push_back("NOT WS_VISIBLE");
+
+  return node;
 }
 
 YGSize resource::measure([[maybe_unused]] YGNodeConstRef node, float width, YGMeasureMode width_mode, float height, YGMeasureMode height_mode) {

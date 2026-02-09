@@ -16,8 +16,8 @@ void common_text_control::output(YGNodeConstRef node, std::ostream& os) const {
   os << "\n";
 }
 
-void common_text_control::from_xaml(const pugi::xml_node& xaml, YGNodeRef node) {
-  resource::from_xaml(xaml, node);
+YGNodeRef common_text_control::from_xaml(const pugi::xml_node& xaml, std::optional<YGNodeRef> parent) {
+  auto node = resource::from_xaml(xaml, parent);
 
   auto content = xaml.attribute("Content");
   if (content)
@@ -26,4 +26,6 @@ void common_text_control::from_xaml(const pugi::xml_node& xaml, YGNodeRef node) 
   auto is_tab_stop = xaml.attribute("IsTabStop").as_bool(true);
   if (is_tab_stop)
     style_.push_back("WS_TABSTOP");
+
+  return node;
 }

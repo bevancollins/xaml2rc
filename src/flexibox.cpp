@@ -7,8 +7,8 @@ std::string_view flexibox::resource_class() const {
 void flexibox::output([[maybe_unused]] YGNodeConstRef node, [[maybe_unused]] std::ostream& os) const {
 }
 
-void flexibox::from_xaml(const pugi::xml_node& xaml, YGNodeRef node) {
-  resource::from_xaml(xaml, node);
+YGNodeRef flexibox::from_xaml(const pugi::xml_node& xaml, std::optional<YGNodeRef> parent) {
+  auto node = resource::from_xaml(xaml, parent);
 
   std::string_view orientation          { xaml.attribute("Orientation").as_string("Vertical") };
   std::string_view vertical_alignment   { xaml.attribute("VerticalAlignment").as_string("Stretch") };
@@ -25,6 +25,8 @@ void flexibox::from_xaml(const pugi::xml_node& xaml, YGNodeRef node) {
   } else {
     throw std::runtime_error(std::format("unrecognised Orientation ({})", orientation));
   }
+
+  return node;
 }
 
 YGJustify flexibox::parse_justify(std::string_view alignment) {

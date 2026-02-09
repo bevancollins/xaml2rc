@@ -5,7 +5,7 @@
 class pushbutton : public common_text_control {
 public:
   std::string_view resource_class() const override;
-  void from_xaml(const pugi::xml_node& xaml, YGNodeRef node) override;
+  YGNodeRef from_xaml(const pugi::xml_node& xaml, std::optional<YGNodeRef> parent) override;
   YGSize measure(YGNodeConstRef node, float width, YGMeasureMode width_mode, float height, YGMeasureMode height_mode) override;
 
 private:
