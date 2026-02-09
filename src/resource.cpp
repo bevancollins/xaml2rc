@@ -50,6 +50,17 @@ YGNodeRef resource::from_xaml(const pugi::xml_node& xaml, std::optional<YGNodeRe
     }
   }
 
+  // HorizontalAlignment and VerticalAlignment control how this element aligns itself within its parent.
+  // In Yoga, YGNodeStyleSetAlignSelf controls alignment along the *cross axis* relative to its parent.
+  // If both HorizontalAlignment and VerticalAlignment are present, the last one parsed will take precedence for AlignSelf.
+  auto horizontal_alignment = xaml.attribute("HorizontalAlignment");
+  if (horizontal_alignment)
+    YGNodeStyleSetAlignSelf(node, parse_align(horizontal_alignment.value()));
+
+  auto vertical_alignment = xaml.attribute("VerticalAlignment");
+  if (vertical_alignment)
+    YGNodeStyleSetAlignSelf(node, parse_align(vertical_alignment.value()));
+
   auto enabled = xaml.attribute("IsEnabled").as_bool(true);
   if (!enabled)
     style_.push_back("WS_DISABLED");
@@ -111,4 +122,28 @@ std::array<int, 4> resource::parse_quad(std::string_view input) {
   }
 
   return result;
+}
+
+YGJustify resource::parse_justify(std::string_view alignment) const {
+  if (alignment == "Left" || alignment == "Top")
+    return YGJustifyFlexStart;
+  else if (alignment == "Center")
+    return YGJustifyCenter;
+  else if (alignment == "Right" || alignment == "Bottom")
+    return YGJustifyFlexEnd;
+  else
+    return YGJustifyFlexStart;
+}
+
+YGAlign resource::parse_align(std::string_view alignment) const {
+  if (alignment == "Left" || alignment == "Top")
+    return YGAlignFlexStart;
+  else if (alignment == "Center")
+    return YGAlignCenter;
+  else if (alignment == "Right" || alignment == "Bottom")
+    return YGAlignFlexEnd;
+  else if (alignment == "Stretch")
+    return YGAlignStretch;
+  else
+    return YGAlignStretch;
 }

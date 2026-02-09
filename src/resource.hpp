@@ -25,6 +25,8 @@ protected:
   std::string extended_style() const;
   std::string join_strings(const std::vector<std::string>& strings) const;
   std::array<int, 4> parse_quad(std::string_view input);
+  YGJustify parse_justify(std::string_view alignment) const;
+  YGAlign parse_align(std::string_view alignment) const;
 
   std::string id_;
   std::vector<std::string> style_;
