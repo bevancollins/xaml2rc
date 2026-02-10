@@ -1,8 +1,8 @@
 #pragma once
 
-#include "resource.hpp"
+#include "widget.hpp"
 
-class edittext : public resource {
+class edittext : public widget {
 public:
   std::string_view resource_class() const override;
 };

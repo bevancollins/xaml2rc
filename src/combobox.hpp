@@ -1,9 +1,10 @@
 #pragma once
 
-#include "resource.hpp"
+#include "widget.hpp"
 
-class combobox : public resource {
+class combobox : public widget {
 public:
   std::string_view resource_class() const override;
   YGNodeRef from_xaml(const pugi::xml_node& xaml, std::optional<YGNodeRef> parent) override;
+  int default_height_dlu() const override;
 };

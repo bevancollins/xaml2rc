@@ -1,8 +1,8 @@
 #pragma once
 
-#include "resource.hpp"
+#include "widget.hpp"
 
-class listbox : public resource {
+class listbox : public widget {
 public:
   std::string_view resource_class() const override;
 };

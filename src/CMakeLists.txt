@@ -26,6 +26,8 @@ add_executable(xaml2rc
   resource.hpp
   stackpanel.cpp
   stackpanel.hpp
+  widget.cpp
+  widget.hpp
   xamlimporter.cpp
   xamlimporter.hpp
 )
