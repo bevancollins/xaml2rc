@@ -92,11 +92,25 @@ void resource::measure([[maybe_unused]] YGNodeConstRef node, [[maybe_unused]] fl
 }
 
 std::string resource::x(YGNodeConstRef node) const {
-  return std::to_string(font_metrics::instance().dip_to_dlu_x(YGNodeLayoutGetLeft(node)));
+  auto n = const_cast<YGNodeRef>(node);
+  float x{};
+  while(n) {
+    x += YGNodeLayoutGetLeft(n); // returns the relative left from parent
+    n = YGNodeGetParent(n);
+  }
+
+  return std::to_string(font_metrics::instance().dip_to_dlu_x(x));
 }
 
 std::string resource::y(YGNodeConstRef node) const {
-  return std::to_string(font_metrics::instance().dip_to_dlu_y(YGNodeLayoutGetTop(node)));
+  auto n = const_cast<YGNodeRef>(node);
+  float y{};
+  while(n) {
+    y += YGNodeLayoutGetTop(n); // returns the relative top from parent
+    n = YGNodeGetParent(n);
+  }
+
+  return std::to_string(font_metrics::instance().dip_to_dlu_y(y));
 }
 
 std::string resource::width(YGNodeConstRef node) const {
