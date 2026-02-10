@@ -13,6 +13,8 @@ add_executable(xaml2rc
   edittext.hpp
   fontmetrics.cpp
   fontmetrics.hpp
+  groupbox.cpp
+  groupbox.hpp
   listbox.cpp
   listbox.hpp
   ltext.cpp
@@ -20,6 +22,8 @@ add_executable(xaml2rc
   main.cpp
   pushbutton.cpp
   pushbutton.hpp
+  radiobutton.cpp
+  radiobutton.hpp
   resource.cpp
   resource.hpp
   stackpanel.cpp

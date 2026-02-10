@@ -5,9 +5,11 @@
 #include "combobox.hpp"
 #include "dialogex.hpp"
 #include "edittext.hpp"
+#include "groupbox.hpp"
 #include "listbox.hpp"
 #include "ltext.hpp"
 #include "pushbutton.hpp"
+#include "radiobutton.hpp"
 #include "stackpanel.hpp"
 
 using namespace std::string_view_literals;
@@ -37,10 +39,14 @@ YGNodeRef xamlimporter::parse_xaml(const pugi::xml_node& xaml, std::optional<YGN
     r = std::make_unique<checkbox>();
   else if (name == "ComboBox")
     r = std::make_unique<combobox>();
+  else if (name == "GroupBox")
+    r = std::make_unique<groupbox>();
   else if (name == "ListBox")
     r = std::make_unique<listbox>();
   else if (name == "Label")
     r = std::make_unique<ltext>();
+  else if (name == "RadioButton")
+    r = std::make_unique<radiobutton>();
   else if (name == "TextBox")
     r = std::make_unique<edittext>();
   else
