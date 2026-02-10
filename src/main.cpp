@@ -6,20 +6,10 @@
 #include "xamlimporter.hpp"
 #include "resource.hpp"
 
-void to_rc(YGNodeRef node, std::ostream& os) {
+void output(YGNodeRef node, std::ostream& os) {
   auto c = reinterpret_cast<resource*>(YGNodeGetContext(node));
   if (c)
-    c->to_rc(node, os);
-
-  auto child_count = YGNodeGetChildCount(node);
-  if (child_count > 1)
-    os << "BEGIN\n";
-
-  for (size_t i = 0; i < child_count; i++)
-    to_rc(YGNodeGetChild(node, i), os);
-
-  if (child_count > 1)
-    os << "END\n";
+    c->output(node, os);
 }
 
 int main(int argc, char** argv) {
@@ -38,7 +28,7 @@ int main(int argc, char** argv) {
     } else {
       out = &std::cout;
     }
-    to_rc(root, *out);
+    output(root, *out);
 
     return EXIT_SUCCESS;
 

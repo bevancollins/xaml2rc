@@ -5,7 +5,7 @@ std::string_view groupbox::resource_class() const {
   return "GROUPBOX";
 }
 
-void groupbox::to_rc(YGNodeConstRef node, std::ostream& os) const {
+void groupbox::output(YGNodeConstRef node, std::ostream& os) const {
   os << std::format("{} \"{}\", {}, {}, {}, {}, {}", resource_class(), header_, id_, x(node), y(node), width(node), height(node));
 
   if (!style_.empty())
@@ -18,6 +18,8 @@ void groupbox::to_rc(YGNodeConstRef node, std::ostream& os) const {
   }
 
   os << "\n";
+
+  output_children(node, os);
 }
 
 YGNodeRef groupbox::from_xaml(const pugi::xml_node& xaml, std::optional<YGNodeRef> parent) {

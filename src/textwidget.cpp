@@ -3,7 +3,7 @@
 #include <format>
 #include "fontmetrics.hpp"
 
-void text_widget::to_rc(YGNodeConstRef node, std::ostream& os) const {
+void text_widget::output(YGNodeConstRef node, std::ostream& os) const {
   os << std::format("{} \"{}\", {}, {}, {}, {}, {}", resource_class(), text_, id_, x(node), y(node), width(node), height(node));
 
   if (!style_.empty())

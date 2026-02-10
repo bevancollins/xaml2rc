@@ -4,7 +4,8 @@ std::string_view stackpanel::resource_class() const {
   return {};
 }
 
-void stackpanel::to_rc([[maybe_unused]] YGNodeConstRef node, [[maybe_unused]] std::ostream& os) const {
+void stackpanel::output(YGNodeConstRef node, std::ostream& os) const {
+  output_children(node, os);
 }
 
 YGNodeRef stackpanel::from_xaml(const pugi::xml_node& xaml, std::optional<YGNodeRef> parent) {

@@ -6,7 +6,7 @@ std::string_view dialogex::resource_class() const {
   return "DIALOGEX";
 }
 
-void dialogex::to_rc(YGNodeConstRef node, std::ostream& os) const {
+void dialogex::output(YGNodeConstRef node, std::ostream& os) const {
   os << std::format("{} {} {}, {}, {}, {}\n", id_, resource_class(), x(node), y(node), width(node), height(node));
   os << std::format("CAPTION \"{}\"\n", caption_);
 
@@ -17,6 +17,10 @@ void dialogex::to_rc(YGNodeConstRef node, std::ostream& os) const {
     os << std::format("EXSTYLE {}\n", extended_style());
 
   os << std::format("FONT {}, \"{}\", {}, {}, {:#x}\n", font_size_, font_face_, font_weight_, font_italic_ ? 1 : 0, font_char_set_);
+
+  os << "BEGIN\n";
+  output_children(node, os);
+  os << "END\n";
 }
 
 YGNodeRef dialogex::from_xaml(const pugi::xml_node& xaml, std::optional<YGNodeRef> parent) {

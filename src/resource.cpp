@@ -69,7 +69,7 @@ YGNodeRef resource::from_xaml(const pugi::xml_node& xaml, std::optional<YGNodeRe
   return node;
 }
 
-void resource::to_rc(YGNodeConstRef node, std::ostream& os) const {
+void resource::output(YGNodeConstRef node, std::ostream& os) const {
   auto cls = resource_class();
   if (cls.empty())
     return;
@@ -86,6 +86,18 @@ void resource::to_rc(YGNodeConstRef node, std::ostream& os) const {
   }
 
   os << "\n";
+
+  output_children(node, os);
+}
+
+void resource::output_children(YGNodeConstRef node, std::ostream& os) const {
+  auto child_count = YGNodeGetChildCount(node);
+  for (size_t i = 0; i < child_count; i++) {
+    auto child = YGNodeGetChild(const_cast<YGNodeRef>(node), i);
+    auto context = reinterpret_cast<resource*>(YGNodeGetContext(child));
+    if (context)
+      context->output(child, os);
+  }
 }
 
 void resource::measure([[maybe_unused]] YGNodeConstRef node, [[maybe_unused]] float& width, [[maybe_unused]] YGMeasureMode& width_mode, [[maybe_unused]] float& height, [[maybe_unused]] YGMeasureMode& height_mode) {

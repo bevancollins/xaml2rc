@@ -13,10 +13,11 @@ class resource {
 public:
   virtual std::string_view resource_class() const = 0;
   virtual YGNodeRef from_xaml(const pugi::xml_node& xaml, std::optional<YGNodeRef> parent);
-  virtual void to_rc(YGNodeConstRef node, std::ostream& os) const;
+  virtual void output(YGNodeConstRef node, std::ostream& os) const;
   virtual void measure(YGNodeConstRef node, float& width, YGMeasureMode& width_mode, float& height, YGMeasureMode& height_mode);
 
 protected:
+  void output_children(YGNodeConstRef node, std::ostream& os) const;
   std::string x(YGNodeConstRef node) const;
   std::string y(YGNodeConstRef node) const;
   std::string width(YGNodeConstRef node) const;
