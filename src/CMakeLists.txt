@@ -13,8 +13,6 @@ add_executable(xaml2rc
   edittext.hpp
   fontmetrics.cpp
   fontmetrics.hpp
-  flexibox.cpp
-  flexibox.hpp
   ltext.cpp
   ltext.hpp
   main.cpp
@@ -22,6 +20,8 @@ add_executable(xaml2rc
   pushbutton.hpp
   resource.cpp
   resource.hpp
+  stackpanel.cpp
+  stackpanel.hpp
   xamlimporter.cpp
   xamlimporter.hpp
 )

@@ -2,7 +2,7 @@
 
 #include "resource.hpp"
 
-class flexibox : public resource {
+class stackpanel : public resource {
 public:
   using resource::resource;
 

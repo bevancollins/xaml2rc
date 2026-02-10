@@ -1,13 +1,13 @@
-#include "flexibox.hpp"
+#include "stackpanel.hpp"
 
-std::string_view flexibox::resource_class() const {
+std::string_view stackpanel::resource_class() const {
   return {};
 }
 
-void flexibox::to_rc([[maybe_unused]] YGNodeConstRef node, [[maybe_unused]] std::ostream& os) const {
+void stackpanel::to_rc([[maybe_unused]] YGNodeConstRef node, [[maybe_unused]] std::ostream& os) const {
 }
 
-YGNodeRef flexibox::from_xaml(const pugi::xml_node& xaml, std::optional<YGNodeRef> parent) {
+YGNodeRef stackpanel::from_xaml(const pugi::xml_node& xaml, std::optional<YGNodeRef> parent) {
   auto node = resource::from_xaml(xaml, parent);
 
   std::string_view orientation          { xaml.attribute("Orientation").as_string("Vertical") };

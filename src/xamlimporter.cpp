@@ -4,9 +4,9 @@
 #include "checkbox.hpp"
 #include "dialogex.hpp"
 #include "edittext.hpp"
-#include "flexibox.hpp"
 #include "ltext.hpp"
 #include "pushbutton.hpp"
+#include "stackpanel.hpp"
 
 using namespace std::string_view_literals;
 
@@ -28,7 +28,7 @@ YGNodeRef xamlimporter::parse_xaml(const pugi::xml_node& xaml, std::optional<YGN
   if (name == "Window")
     r = std::make_unique<dialogex>();
   else if (name == "StackPanel")
-    r = std::make_unique<flexibox>();
+    r = std::make_unique<stackpanel>();
   else if (name == "Button")
     r = std::make_unique<pushbutton>();
   else if (name == "CheckBox")
