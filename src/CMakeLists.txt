@@ -5,6 +5,8 @@ find_package(yoga CONFIG REQUIRED)
 add_executable(xaml2rc
   checkbox.cpp
   checkbox.hpp
+  combobox.cpp
+  combobox.hpp
   common_text_control.cpp
   common_text_control.hpp
   dialogex.cpp

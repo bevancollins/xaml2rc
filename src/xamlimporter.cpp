@@ -2,6 +2,7 @@
 #include <string_view>
 #include <yoga/Yoga.h>
 #include "checkbox.hpp"
+#include "combobox.hpp"
 #include "dialogex.hpp"
 #include "edittext.hpp"
 #include "listbox.hpp"
@@ -34,6 +35,8 @@ YGNodeRef xamlimporter::parse_xaml(const pugi::xml_node& xaml, std::optional<YGN
     r = std::make_unique<pushbutton>();
   else if (name == "CheckBox")
     r = std::make_unique<checkbox>();
+  else if (name == "ComboBox")
+    r = std::make_unique<combobox>();
   else if (name == "ListBox")
     r = std::make_unique<listbox>();
   else if (name == "Label")
