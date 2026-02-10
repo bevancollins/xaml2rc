@@ -2,7 +2,7 @@
 
 #include "widget.hpp"
 
-class common_text_control : public widget {
+class text_widget : public widget {
 public:
   virtual void to_rc(YGNodeConstRef node, std::ostream& os) const override;
   virtual YGNodeRef from_xaml(const pugi::xml_node& xaml, std::optional<YGNodeRef> parent) override;

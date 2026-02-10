@@ -1,9 +1,9 @@
-#include "common_text_control.hpp"
+#include "textwidget.hpp"
 #include <algorithm>
 #include <format>
 #include "fontmetrics.hpp"
 
-void common_text_control::to_rc(YGNodeConstRef node, std::ostream& os) const {
+void text_widget::to_rc(YGNodeConstRef node, std::ostream& os) const {
   os << std::format("{} \"{}\", {}, {}, {}, {}, {}", resource_class(), text_, id_, x(node), y(node), width(node), height(node));
 
   if (!style_.empty())
@@ -18,7 +18,7 @@ void common_text_control::to_rc(YGNodeConstRef node, std::ostream& os) const {
   os << "\n";
 }
 
-YGNodeRef common_text_control::from_xaml(const pugi::xml_node& xaml, std::optional<YGNodeRef> parent) {
+YGNodeRef text_widget::from_xaml(const pugi::xml_node& xaml, std::optional<YGNodeRef> parent) {
   auto node = widget::from_xaml(xaml, parent);
 
   auto content = xaml.attribute("Content");
@@ -28,7 +28,7 @@ YGNodeRef common_text_control::from_xaml(const pugi::xml_node& xaml, std::option
   return node;
 }
 
-void common_text_control::measure(YGNodeConstRef node, float& width, YGMeasureMode& width_mode, float& height, YGMeasureMode& height_mode) {
+void text_widget::measure(YGNodeConstRef node, float& width, YGMeasureMode& width_mode, float& height, YGMeasureMode& height_mode) {
   widget::measure(node, width, width_mode, height, height_mode);
 
   // Calculate intrinsic width based on text

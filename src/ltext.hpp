@@ -1,8 +1,8 @@
 #pragma once
 
-#include "common_text_control.hpp"
+#include "textwidget.hpp"
 
-class ltext : public common_text_control {
+class ltext : public text_widget {
 public:
   std::string_view resource_class() const override;
 

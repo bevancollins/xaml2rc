@@ -7,8 +7,6 @@ add_executable(xaml2rc
   checkbox.hpp
   combobox.cpp
   combobox.hpp
-  common_text_control.cpp
-  common_text_control.hpp
   dialogex.cpp
   dialogex.hpp
   edittext.cpp
@@ -26,6 +24,8 @@ add_executable(xaml2rc
   resource.hpp
   stackpanel.cpp
   stackpanel.hpp
+  textwidget.cpp
+  textwidget.hpp
   widget.cpp
   widget.hpp
   xamlimporter.cpp
