@@ -1,6 +1,5 @@
 #include "edittext.hpp"
 #include <format>
-#include "fontmetrics.hpp"
 
 std::string_view edittext::resource_class() const {
   return "EDITTEXT";

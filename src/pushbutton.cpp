@@ -1,5 +1,4 @@
 #include "pushbutton.hpp"
-#include "fontmetrics.hpp"
 
 std::string_view pushbutton::resource_class() const {
   return "PUSHBUTTON";

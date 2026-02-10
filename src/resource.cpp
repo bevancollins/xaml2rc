@@ -1,7 +1,6 @@
 #include "resource.hpp"
 #include <ranges>
 #include "fontmetrics.hpp"
-#include <iostream>
 
 YGNodeRef resource::from_xaml(const pugi::xml_node& xaml, std::optional<YGNodeRef> parent) {
   auto node = YGNodeNew();

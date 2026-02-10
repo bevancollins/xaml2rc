@@ -2,7 +2,6 @@
 #include <algorithm>
 #include <format>
 #include "fontmetrics.hpp"
-#include <iostream>
 
 void common_text_control::to_rc(YGNodeConstRef node, std::ostream& os) const {
   os << std::format("{} \"{}\", {}, {}, {}, {}, {}", resource_class(), text_, id_, x(node), y(node), width(node), height(node));
