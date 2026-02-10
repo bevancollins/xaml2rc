@@ -1,5 +1,6 @@
 #include "groupbox.hpp"
 #include <format>
+#include "fontmetrics.hpp"
 
 std::string_view groupbox::resource_class() const {
   return "GROUPBOX";
@@ -28,6 +29,22 @@ YGNodeRef groupbox::from_xaml(const pugi::xml_node& xaml, std::optional<YGNodeRe
   auto header = xaml.attribute("Header");
   if (header)
     header_ = header.as_string();
+
+  // add padding to the top
+  if (YGNodeStyleGetPadding(node, YGEdgeTop).unit == YGUnitUndefined)
+    YGNodeStyleSetPadding(node, YGEdgeTop, font_metrics::instance().dlu_to_dip_y(12));
+
+  // and to the left
+  if (YGNodeStyleGetPadding(node, YGEdgeLeft).unit == YGUnitUndefined)
+    YGNodeStyleSetPadding(node, YGEdgeLeft, font_metrics::instance().dlu_to_dip_y(9));
+
+  // and to the bottom
+  if (YGNodeStyleGetPadding(node, YGEdgeBottom).unit == YGUnitUndefined)
+    YGNodeStyleSetPadding(node, YGEdgeBottom, font_metrics::instance().dlu_to_dip_y(7));
+
+  // and to the right
+  if (YGNodeStyleGetPadding(node, YGEdgeRight).unit == YGUnitUndefined)
+    YGNodeStyleSetPadding(node, YGEdgeRight, font_metrics::instance().dlu_to_dip_y(7));
 
   return node;
 }

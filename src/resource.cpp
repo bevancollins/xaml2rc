@@ -35,6 +35,12 @@ YGNodeRef resource::from_xaml(const pugi::xml_node& xaml, std::optional<YGNodeRe
     } else {
       YGNodeStyleSetMargin(node, YGEdgeAll, margin.as_float());
     }
+  } else {
+    // use defaults
+    YGNodeStyleSetMargin(node, YGEdgeLeft,   4);
+    YGNodeStyleSetMargin(node, YGEdgeRight,  4);
+    YGNodeStyleSetMargin(node, YGEdgeTop,    3);
+    YGNodeStyleSetMargin(node, YGEdgeBottom, 3);
   }
 
   auto padding = xaml.attribute("Padding");
