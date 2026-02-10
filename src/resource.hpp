@@ -28,7 +28,7 @@ protected:
   YGJustify parse_justify(std::string_view alignment) const;
   YGAlign parse_align(std::string_view alignment) const;
 
-  std::string id_;
+  std::string id_{"-1"};
   std::vector<std::string> style_;
   std::vector<std::string> extended_style_;
 };
