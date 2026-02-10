@@ -14,7 +14,7 @@ public:
   virtual std::string_view resource_class() const = 0;
   virtual YGNodeRef from_xaml(const pugi::xml_node& xaml, std::optional<YGNodeRef> parent);
   virtual void to_rc(YGNodeConstRef node, std::ostream& os) const = 0;
-  virtual YGSize measure(YGNodeConstRef node, float width, YGMeasureMode width_mode, float height, YGMeasureMode height_mode);
+  virtual void measure(YGNodeConstRef node, float& width, YGMeasureMode& width_mode, float& height, YGMeasureMode& height_mode);
 
 protected:
   std::string x(YGNodeConstRef node) const;

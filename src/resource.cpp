@@ -1,6 +1,7 @@
 #include "resource.hpp"
 #include <ranges>
 #include "fontmetrics.hpp"
+#include <iostream>
 
 YGNodeRef resource::from_xaml(const pugi::xml_node& xaml, std::optional<YGNodeRef> parent) {
   auto node = YGNodeNew();
@@ -50,6 +51,10 @@ YGNodeRef resource::from_xaml(const pugi::xml_node& xaml, std::optional<YGNodeRe
     }
   }
 
+  auto visibility = std::string_view{ xaml.attribute("Visibility").value() };
+  if (visibility == "Hidden")
+    style_.push_back("NOT WS_VISIBLE");
+
   // HorizontalAlignment and VerticalAlignment control how this element aligns itself within its parent.
   // In Yoga, YGNodeStyleSetAlignSelf controls alignment along the *cross axis* relative to its parent.
   // If both HorizontalAlignment and VerticalAlignment are present, the last one parsed will take precedence for AlignSelf.
@@ -61,25 +66,10 @@ YGNodeRef resource::from_xaml(const pugi::xml_node& xaml, std::optional<YGNodeRe
   if (vertical_alignment)
     YGNodeStyleSetAlignSelf(node, parse_align(vertical_alignment.value()));
 
-  auto enabled = xaml.attribute("IsEnabled").as_bool(true);
-  if (!enabled)
-    style_.push_back("WS_DISABLED");
-
-  auto visibility = std::string_view{ xaml.attribute("Visibility").value() };
-  if (visibility == "Hidden")
-    style_.push_back("NOT WS_VISIBLE");
-
   return node;
 }
 
-YGSize resource::measure([[maybe_unused]] YGNodeConstRef node, float width, YGMeasureMode width_mode, float height, YGMeasureMode height_mode) {
-  if (width_mode == YGMeasureModeAtMost)
-    width = 0;
-
-  if (height_mode == YGMeasureModeAtMost)
-    height = 0;
-
-  return {width, height};
+void resource::measure([[maybe_unused]] YGNodeConstRef node, [[maybe_unused]] float& width, [[maybe_unused]] YGMeasureMode& width_mode, [[maybe_unused]] float& height, [[maybe_unused]] YGMeasureMode& height_mode) {
 }
 
 std::string resource::x(YGNodeConstRef node) const {

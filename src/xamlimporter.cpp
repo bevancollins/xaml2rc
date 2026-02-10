@@ -57,9 +57,8 @@ YGNodeRef xamlimporter::parse_xaml(const pugi::xml_node& xaml, std::optional<YGN
           YGMeasureMode height_mode)->YGSize {
         auto r = reinterpret_cast<resource*>(YGNodeGetContext(node));
         if (r)
-          return r->measure(node, width, width_mode, height, height_mode);
-        else
-          return {width, height};
+          r->measure(node, width, width_mode, height, height_mode);
+        return {width, height};
       }
     );
   }

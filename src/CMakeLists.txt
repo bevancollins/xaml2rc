@@ -31,6 +31,11 @@ target_compile_features(xaml2rc
     cxx_std_23
 )
 
+target_compile_definitions(xaml2rc
+  PRIVATE
+    NOMINMAX
+)
+
 target_link_libraries(xaml2rc
   PRIVATE
     pugixml::pugixml

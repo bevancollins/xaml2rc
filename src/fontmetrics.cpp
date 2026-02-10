@@ -14,8 +14,9 @@ void font_metrics::initialise(const char* face, int size, int weight, bool itali
   if (!hdc)
     throw std::system_error(GetLastError(), std::system_category());
 
-  auto dpi_y = GetDeviceCaps(hdc.get(), LOGPIXELSY);
-  auto height = -MulDiv(size, dpi_y, 72); // negative = character height
+  dpi_x_ = GetDeviceCaps(hdc.get(), LOGPIXELSX);
+  dpi_y_ = GetDeviceCaps(hdc.get(), LOGPIXELSY);
+  auto height = -MulDiv(size, dpi_y_, 72); // negative = character height
 
   wil::unique_hfont font { CreateFontA(
       height,
@@ -31,7 +32,8 @@ void font_metrics::initialise(const char* face, int size, int weight, bool itali
   if (!font)
     throw std::system_error(GetLastError(), std::system_category());
 
-  auto old = wil::SelectObject(hdc.get(), font.get());
+  font_handle_ = std::move(font);
+  wil::SelectObject(hdc.get(), font_handle_.get());
 
   TEXTMETRICA tm{};
   if (!GetTextMetricsA(hdc.get(), &tm))
@@ -55,4 +57,19 @@ float font_metrics::dlu_to_dip_x(int x) const {
 
 float font_metrics::dlu_to_dip_y(int y) const {
   return y * base_unit_y_ / 8.0f;
+}
+
+float font_metrics::measure_text_width_dip(std::string_view text) const {
+  wil::unique_hdc hdc { CreateCompatibleDC(nullptr) };
+  if (!hdc)
+    throw std::system_error(GetLastError(), std::system_category());
+
+  wil::SelectObject(hdc.get(), font_handle_.get());
+
+  SIZE size{};
+  if (!GetTextExtentPoint32A(hdc.get(), text.data(), static_cast<int>(text.length()), &size))
+    throw std::system_error(GetLastError(), std::system_category());
+
+  // Convert pixels to DIPs (1 DIP = 1/96th inch)
+  return static_cast<float>(size.cx) * 96.0f / static_cast<float>(dpi_x_);
 }
