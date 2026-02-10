@@ -23,7 +23,7 @@ void dialogex::output(YGNodeConstRef node, std::ostream& os) const {
   os << "END\n";
 }
 
-YGNodeRef dialogex::from_xaml(const pugi::xml_node& xaml, std::optional<YGNodeRef> parent) {
+YGNodeRef dialogex::process_xaml(const pugi::xml_node& xaml, std::optional<YGNodeRef> parent) {
   auto title = xaml.attribute("Title");
   if (title)
     caption_ = title.value();
@@ -67,7 +67,7 @@ YGNodeRef dialogex::from_xaml(const pugi::xml_node& xaml, std::optional<YGNodeRe
 
   font_metrics::instance().initialise(font_face_.c_str(), font_size_, font_weight_, font_italic_, font_char_set_);
 
-  auto node = resource::from_xaml(xaml, parent);
+  auto node = resource::process_xaml(xaml, parent);
 
   // add padding to the top
   if (YGNodeStyleGetPadding(node, YGEdgeTop).unit == YGUnitUndefined)

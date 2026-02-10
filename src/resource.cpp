@@ -3,7 +3,7 @@
 #include <ranges>
 #include "fontmetrics.hpp"
 
-YGNodeRef resource::from_xaml(const pugi::xml_node& xaml, std::optional<YGNodeRef> parent) {
+YGNodeRef resource::process_xaml(const pugi::xml_node& xaml, std::optional<YGNodeRef> parent) {
   auto node = YGNodeNew();
   if (parent) {
     auto child_index = YGNodeGetChildCount(parent.value());

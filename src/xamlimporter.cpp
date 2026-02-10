@@ -21,12 +21,12 @@ std::tuple<YGNodeRef, std::vector<std::unique_ptr<resource>>> xamlimporter::impo
     throw std::runtime_error(result.description());
 
   std::vector<std::unique_ptr<resource>> resources;
-  auto root_node = parse_xaml(doc.document_element(), {}, resources);
+  auto root_node = process_xaml(doc.document_element(), {}, resources);
 
   return std::make_tuple(root_node, std::move(resources));
 }
 
-YGNodeRef xamlimporter::parse_xaml(const pugi::xml_node& xaml, std::optional<YGNodeRef> parent, std::vector<std::unique_ptr<resource>>& resources) {
+YGNodeRef xamlimporter::process_xaml(const pugi::xml_node& xaml, std::optional<YGNodeRef> parent, std::vector<std::unique_ptr<resource>>& resources) {
   std::unique_ptr<resource> r;
   std::string_view name{ xaml.name() };
   if (name == "Window")
@@ -52,11 +52,11 @@ YGNodeRef xamlimporter::parse_xaml(const pugi::xml_node& xaml, std::optional<YGN
   else
     return {};
 
-  auto node = r->from_xaml(xaml, parent);
+  auto node = r->process_xaml(xaml, parent);
   resources.push_back(std::move(r));
 
   for (auto& xml_node_child : xaml.children())
-    parse_xaml(xml_node_child, node, resources);
+    process_xaml(xml_node_child, node, resources);
 
   // nodes with children can't have a measure function
   auto child_count = YGNodeGetChildCount(node);

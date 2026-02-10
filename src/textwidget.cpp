@@ -18,8 +18,8 @@ void text_widget::output(YGNodeConstRef node, std::ostream& os) const {
   os << "\n";
 }
 
-YGNodeRef text_widget::from_xaml(const pugi::xml_node& xaml, std::optional<YGNodeRef> parent) {
-  auto node = widget::from_xaml(xaml, parent);
+YGNodeRef text_widget::process_xaml(const pugi::xml_node& xaml, std::optional<YGNodeRef> parent) {
+  auto node = widget::process_xaml(xaml, parent);
 
   auto content = xaml.attribute("Content");
   if (content)

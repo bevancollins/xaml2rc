@@ -2,8 +2,8 @@
 #include <algorithm>
 #include "fontmetrics.hpp"
 
-YGNodeRef widget::from_xaml(const pugi::xml_node& xaml, std::optional<YGNodeRef> parent) {
-  auto node = resource::from_xaml(xaml, parent);
+YGNodeRef widget::process_xaml(const pugi::xml_node& xaml, std::optional<YGNodeRef> parent) {
+  auto node = resource::process_xaml(xaml, parent);
 
   auto is_tab_stop = xaml.attribute("IsTabStop").as_bool(true);
   if (is_tab_stop)

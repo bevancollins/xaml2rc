@@ -12,5 +12,5 @@ public:
   std::tuple<YGNodeRef, std::vector<std::unique_ptr<resource>>> import(const std::filesystem::path& path);
 
 private:
-  YGNodeRef parse_xaml(const pugi::xml_node& xaml, std::optional<YGNodeRef> parent, std::vector<std::unique_ptr<resource>>& resources);
+  YGNodeRef process_xaml(const pugi::xml_node& xaml, std::optional<YGNodeRef> parent, std::vector<std::unique_ptr<resource>>& resources);
 };
