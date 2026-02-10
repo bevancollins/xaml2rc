@@ -13,4 +13,5 @@ public:
 
 private:
   YGNodeRef process_xaml(const pugi::xml_node& xaml, std::optional<YGNodeRef> parent, std::vector<std::unique_ptr<resource>>& resources);
+  void finalise_layout(YGNodeRef node);
 };

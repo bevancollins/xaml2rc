@@ -23,6 +23,8 @@ std::tuple<YGNodeRef, std::vector<std::unique_ptr<resource>>> xamlimporter::impo
   std::vector<std::unique_ptr<resource>> resources;
   auto root_node = process_xaml(doc.document_element(), {}, resources);
 
+  finalise_layout(root_node);
+
   return std::make_tuple(root_node, std::move(resources));
 }
 
@@ -76,4 +78,14 @@ YGNodeRef xamlimporter::process_xaml(const pugi::xml_node& xaml, std::optional<Y
   }
 
   return node;
+}
+
+void xamlimporter::finalise_layout(YGNodeRef node) {
+  auto child_count = YGNodeGetChildCount(node);
+  for (size_t i = 0; i < child_count; i++)
+    finalise_layout(YGNodeGetChild(node, i));
+
+  auto context = YGNodeGetContext(node);
+  if (context)
+    (reinterpret_cast<resource*>(context))->finalise_layout(node);
 }

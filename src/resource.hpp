@@ -15,6 +15,7 @@ public:
   virtual YGNodeRef process_xaml(const pugi::xml_node& xaml, std::optional<YGNodeRef> parent);
   virtual void output(YGNodeConstRef node, std::ostream& os) const;
   virtual void measure(YGNodeConstRef node, float& width, YGMeasureMode& width_mode, float& height, YGMeasureMode& height_mode);
+  virtual void finalise_layout(YGNodeRef node);
 
 protected:
   void output_children(YGNodeConstRef node, std::ostream& os) const;

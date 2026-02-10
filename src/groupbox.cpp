@@ -30,6 +30,10 @@ YGNodeRef groupbox::process_xaml(const pugi::xml_node& xaml, std::optional<YGNod
   if (header)
     header_ = header.as_string();
 
+  return node;
+}
+
+void groupbox::finalise_layout(YGNodeRef node) {
   // add padding to the top
   if (YGNodeStyleGetPadding(node, YGEdgeTop).unit == YGUnitUndefined)
     YGNodeStyleSetPadding(node, YGEdgeTop, font_metrics::instance().dlu_to_dip_y(12));
@@ -45,6 +49,4 @@ YGNodeRef groupbox::process_xaml(const pugi::xml_node& xaml, std::optional<YGNod
   // and to the right
   if (YGNodeStyleGetPadding(node, YGEdgeRight).unit == YGUnitUndefined)
     YGNodeStyleSetPadding(node, YGEdgeRight, font_metrics::instance().dlu_to_dip_y(7));
-
-  return node;
 }

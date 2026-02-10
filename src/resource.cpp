@@ -188,3 +188,6 @@ YGAlign resource::parse_align(std::string_view alignment) const {
   else
     return YGAlignStretch;
 }
+
+void resource::finalise_layout([[maybe_unused]] YGNodeRef node) {
+}
