@@ -4,6 +4,7 @@
 #include "checkbox.hpp"
 #include "dialogex.hpp"
 #include "edittext.hpp"
+#include "listbox.hpp"
 #include "ltext.hpp"
 #include "pushbutton.hpp"
 #include "stackpanel.hpp"
@@ -33,6 +34,8 @@ YGNodeRef xamlimporter::parse_xaml(const pugi::xml_node& xaml, std::optional<YGN
     r = std::make_unique<pushbutton>();
   else if (name == "CheckBox")
     r = std::make_unique<checkbox>();
+  else if (name == "ListBox")
+    r = std::make_unique<listbox>();
   else if (name == "Label")
     r = std::make_unique<ltext>();
   else if (name == "TextBox")

@@ -13,6 +13,8 @@ add_executable(xaml2rc
   edittext.hpp
   fontmetrics.cpp
   fontmetrics.hpp
+  listbox.cpp
+  listbox.hpp
   ltext.cpp
   ltext.hpp
   main.cpp

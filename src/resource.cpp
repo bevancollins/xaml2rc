@@ -1,4 +1,5 @@
 #include "resource.hpp"
+#include <format>
 #include <ranges>
 #include "fontmetrics.hpp"
 
@@ -66,6 +67,25 @@ YGNodeRef resource::from_xaml(const pugi::xml_node& xaml, std::optional<YGNodeRe
     YGNodeStyleSetAlignSelf(node, parse_align(vertical_alignment.value()));
 
   return node;
+}
+
+void resource::to_rc(YGNodeConstRef node, std::ostream& os) const {
+  auto cls = resource_class();
+  if (cls.empty())
+    return;
+
+  os << std::format("{} {}, {}, {}, {}, {}", cls, id_, x(node), y(node), width(node), height(node));
+
+  if (!style_.empty())
+    os << std::format(", {}", style());
+
+  if (!extended_style_.empty()) {
+    if (style_.empty())
+      os << ", ";
+    os << std::format(", {}", extended_style());
+  }
+
+  os << "\n";
 }
 
 void resource::measure([[maybe_unused]] YGNodeConstRef node, [[maybe_unused]] float& width, [[maybe_unused]] YGMeasureMode& width_mode, [[maybe_unused]] float& height, [[maybe_unused]] YGMeasureMode& height_mode) {
