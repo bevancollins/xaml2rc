@@ -23,14 +23,12 @@ void groupbox::output(YGNodeConstRef node, std::ostream& os) const {
   output_children(node, os);
 }
 
-YGNodeRef groupbox::process_xaml(const pugi::xml_node& xaml, std::optional<YGNodeRef> parent) {
-  auto node = widget::process_xaml(xaml, parent);
+void groupbox::process_xaml(const pugi::xml_node& xaml, YGNodeRef node) {
+  widget::process_xaml(xaml, node);
 
   auto header = xaml.attribute("Header");
   if (header)
     header_ = header.as_string();
-
-  return node;
 }
 
 void groupbox::finalise_layout(YGNodeRef node) {

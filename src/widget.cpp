@@ -2,14 +2,12 @@
 #include <algorithm>
 #include "fontmetrics.hpp"
 
-YGNodeRef widget::process_xaml(const pugi::xml_node& xaml, std::optional<YGNodeRef> parent) {
-  auto node = resource::process_xaml(xaml, parent);
+void widget::process_xaml(const pugi::xml_node& xaml, YGNodeRef node) {
+  resource::process_xaml(xaml, node);
 
   auto is_tab_stop = xaml.attribute("IsTabStop").as_bool(true);
   if (is_tab_stop)
     style_.push_back("WS_TABSTOP");
-
-  return node;
 }
 
 void widget::measure(YGNodeConstRef node, float& width, YGMeasureMode& width_mode, float& height, YGMeasureMode& height_mode) {

@@ -3,14 +3,7 @@
 #include <ranges>
 #include "fontmetrics.hpp"
 
-YGNodeRef resource::process_xaml(const pugi::xml_node& xaml, std::optional<YGNodeRef> parent) {
-  auto node = YGNodeNew();
-  if (parent) {
-    auto child_index = YGNodeGetChildCount(parent.value());
-    YGNodeInsertChild(parent.value(), node, child_index);
-  }
-  YGNodeSetContext(node, this);
-
+void resource::process_xaml(const pugi::xml_node& xaml, YGNodeRef node) {
   auto name = xaml.attribute("x:Name");
   if (name)
     id_ = name.value();
@@ -71,8 +64,6 @@ YGNodeRef resource::process_xaml(const pugi::xml_node& xaml, std::optional<YGNod
   auto vertical_alignment = xaml.attribute("VerticalAlignment");
   if (vertical_alignment)
     YGNodeStyleSetAlignSelf(node, parse_align(vertical_alignment.value()));
-
-  return node;
 }
 
 void resource::output(YGNodeConstRef node, std::ostream& os) const {

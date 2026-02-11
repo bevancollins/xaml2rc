@@ -18,14 +18,12 @@ void text_widget::output(YGNodeConstRef node, std::ostream& os) const {
   os << "\n";
 }
 
-YGNodeRef text_widget::process_xaml(const pugi::xml_node& xaml, std::optional<YGNodeRef> parent) {
-  auto node = widget::process_xaml(xaml, parent);
+void text_widget::process_xaml(const pugi::xml_node& xaml, YGNodeRef node) {
+  widget::process_xaml(xaml, node);
 
   auto content = xaml.attribute("Content");
   if (content)
     text_ = content.value();
-
-  return node;
 }
 
 void text_widget::measure(YGNodeConstRef node, float& width, YGMeasureMode& width_mode, float& height, YGMeasureMode& height_mode) {

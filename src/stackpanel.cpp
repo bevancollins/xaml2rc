@@ -8,8 +8,8 @@ void stackpanel::output(YGNodeConstRef node, std::ostream& os) const {
   output_children(node, os);
 }
 
-YGNodeRef stackpanel::process_xaml(const pugi::xml_node& xaml, std::optional<YGNodeRef> parent) {
-  auto node = resource::process_xaml(xaml, parent);
+void stackpanel::process_xaml(const pugi::xml_node& xaml, YGNodeRef node) {
+  resource::process_xaml(xaml, node);
 
   std::string_view orientation          { xaml.attribute("Orientation").as_string("Vertical") };
   std::string_view vertical_alignment   { xaml.attribute("VerticalAlignment").as_string("Stretch") };
@@ -26,6 +26,4 @@ YGNodeRef stackpanel::process_xaml(const pugi::xml_node& xaml, std::optional<YGN
   } else {
     throw std::runtime_error(std::format("unrecognised Orientation ({})", orientation));
   }
-
-  return node;
 }

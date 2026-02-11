@@ -54,7 +54,14 @@ YGNodeRef xamlimporter::process_xaml(const pugi::xml_node& xaml, std::optional<Y
   else
     return {};
 
-  auto node = r->process_xaml(xaml, parent);
+  auto node = YGNodeNew();
+  if (parent) {
+    auto child_index = YGNodeGetChildCount(parent.value());
+    YGNodeInsertChild(parent.value(), node, child_index);
+  }
+  YGNodeSetContext(node, r.get());
+
+  r->process_xaml(xaml, node);
   resources.push_back(std::move(r));
 
   for (auto& xml_node_child : xaml.children())

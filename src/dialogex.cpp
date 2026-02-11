@@ -23,7 +23,7 @@ void dialogex::output(YGNodeConstRef node, std::ostream& os) const {
   os << "END\n";
 }
 
-YGNodeRef dialogex::process_xaml(const pugi::xml_node& xaml, std::optional<YGNodeRef> parent) {
+void dialogex::process_xaml(const pugi::xml_node& xaml, YGNodeRef node) {
   auto title = xaml.attribute("Title");
   if (title)
     caption_ = title.value();
@@ -67,7 +67,7 @@ YGNodeRef dialogex::process_xaml(const pugi::xml_node& xaml, std::optional<YGNod
 
   font_metrics::instance().initialise(font_face_.c_str(), font_size_, font_weight_, font_italic_, font_char_set_);
 
-  return resource::process_xaml(xaml, parent);
+  resource::process_xaml(xaml, node);
 }
 
 void dialogex::finalise_layout(YGNodeRef node) {
