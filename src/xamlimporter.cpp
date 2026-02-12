@@ -20,52 +20,54 @@ std::tuple<YGNodeRef, std::vector<std::unique_ptr<resource>>> xamlimporter::impo
   if (!result)
     throw std::runtime_error(result.description());
 
+  auto root_node = YGNodeNew();
   std::vector<std::unique_ptr<resource>> resources;
-  auto root_node = process_xaml(doc.document_element(), {}, resources);
+  process_xaml(doc.document_element(), root_node, resources);
 
   finalise_layout(root_node);
 
   return std::make_tuple(root_node, std::move(resources));
 }
 
-YGNodeRef xamlimporter::process_xaml(const pugi::xml_node& xaml, std::optional<YGNodeRef> parent, std::vector<std::unique_ptr<resource>>& resources) {
+bool xamlimporter::process_xaml(const pugi::xml_node& xaml, YGNodeRef node, std::vector<std::unique_ptr<resource>>& resources) {
   std::unique_ptr<resource> r;
   std::string_view name{ xaml.name() };
   if (name == "Window")
-    r = std::make_unique<dialogex>();
+    r = std::make_unique<dialogex>(node);
   else if (name == "StackPanel")
-    r = std::make_unique<stackpanel>();
+    r = std::make_unique<stackpanel>(node);
   else if (name == "Button")
-    r = std::make_unique<pushbutton>();
+    r = std::make_unique<pushbutton>(node);
   else if (name == "CheckBox")
-    r = std::make_unique<checkbox>();
+    r = std::make_unique<checkbox>(node);
   else if (name == "ComboBox")
-    r = std::make_unique<combobox>();
+    r = std::make_unique<combobox>(node);
   else if (name == "GroupBox")
-    r = std::make_unique<groupbox>();
+    r = std::make_unique<groupbox>(node);
   else if (name == "ListBox")
-    r = std::make_unique<listbox>();
+    r = std::make_unique<listbox>(node);
   else if (name == "Label")
-    r = std::make_unique<ltext>();
+    r = std::make_unique<ltext>(node);
   else if (name == "RadioButton")
-    r = std::make_unique<radiobutton>();
+    r = std::make_unique<radiobutton>(node);
   else if (name == "TextBox")
-    r = std::make_unique<edittext>();
+    r = std::make_unique<edittext>(node);
   else
-    return {};
+    return false;
 
-  auto node = YGNodeNew();
-  if (parent) {
-    auto child_index = YGNodeGetChildCount(parent.value());
-    YGNodeInsertChild(parent.value(), node, child_index);
-  }
-  YGNodeSetContext(node, r.get());
-
-  r->process_xaml(xaml, node);
+  r->process_xaml(xaml);
   resources.push_back(std::move(r));
 
-  for (auto& xml_node_child : xaml.children())
-    process_xaml(xml_node_child, node, resources);
+  for (auto& xml_node_child : xaml.children()) {
+    auto child = YGNodeNew();
+
+    if (process_xaml(xml_node_child, child, resources)) {
+      auto child_index = YGNodeGetChildCount(node);
+      YGNodeInsertChild(node, child, child_index);
+    } else {
+      YGNodeFree(child);
+    }
+  }
 
   // nodes with children can't have a measure function
   auto child_count = YGNodeGetChildCount(node);
@@ -78,13 +80,13 @@ YGNodeRef xamlimporter::process_xaml(const pugi::xml_node& xaml, std::optional<Y
           YGMeasureMode height_mode)->YGSize {
         auto r = reinterpret_cast<resource*>(YGNodeGetContext(node));
         if (r)
-          r->measure(node, width, width_mode, height, height_mode);
+          r->measure(width, width_mode, height, height_mode);
         return {width, height};
       }
     );
   }
 
-  return node;
+  return true;
 }
 
 void xamlimporter::finalise_layout(YGNodeRef node) {
@@ -94,5 +96,5 @@ void xamlimporter::finalise_layout(YGNodeRef node) {
 
   auto context = YGNodeGetContext(node);
   if (context)
-    (reinterpret_cast<resource*>(context))->finalise_layout(node);
+    (reinterpret_cast<resource*>(context))->finalise_layout();
 }

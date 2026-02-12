@@ -3,8 +3,8 @@
 #include <format>
 #include "fontmetrics.hpp"
 
-void text_widget::output(YGNodeConstRef node, std::ostream& os) const {
-  os << std::format("{} \"{}\", {}, {}, {}, {}, {}", resource_class(), text_, id_, x(node), y(node), width(node), height(node));
+void text_widget::output(std::ostream& os) const {
+  os << std::format("{} \"{}\", {}, {}, {}, {}, {}", resource_class(), text_, id_, x(), y(), width(), height());
 
   if (!style_.empty())
     os << std::format(", {}", style());
@@ -18,16 +18,16 @@ void text_widget::output(YGNodeConstRef node, std::ostream& os) const {
   os << "\n";
 }
 
-void text_widget::process_xaml(const pugi::xml_node& xaml, YGNodeRef node) {
-  widget::process_xaml(xaml, node);
+void text_widget::process_xaml(const pugi::xml_node& xaml) {
+  widget::process_xaml(xaml);
 
   auto content = xaml.attribute("Content");
   if (content)
     text_ = content.value();
 }
 
-void text_widget::measure(YGNodeConstRef node, float& width, YGMeasureMode& width_mode, float& height, YGMeasureMode& height_mode) {
-  widget::measure(node, width, width_mode, height, height_mode);
+void text_widget::measure(float& width, YGMeasureMode& width_mode, float& height, YGMeasureMode& height_mode) {
+  widget::measure(width, width_mode, height, height_mode);
 
   // Calculate intrinsic width based on text
   if (width_mode != YGMeasureModeExactly) {

@@ -2,12 +2,21 @@
 #include <format>
 #include "fontmetrics.hpp"
 
+dialogex::dialogex(YGNodeRef node) :
+  resource(node) {
+  // add padding
+  YGNodeStyleSetPadding(node_, YGEdgeTop, font_metrics::instance().dlu_to_dip_y(7));
+  YGNodeStyleSetPadding(node_, YGEdgeLeft, font_metrics::instance().dlu_to_dip_y(7));
+  YGNodeStyleSetPadding(node_, YGEdgeBottom, font_metrics::instance().dlu_to_dip_y(7));
+  YGNodeStyleSetPadding(node_, YGEdgeRight, font_metrics::instance().dlu_to_dip_y(7));
+}
+
 std::string_view dialogex::resource_class() const {
   return "DIALOGEX";
 }
 
-void dialogex::output(YGNodeConstRef node, std::ostream& os) const {
-  os << std::format("{} {} 0, 0, {}, {}\n", id_, resource_class(), width(node), height(node));
+void dialogex::output(std::ostream& os) const {
+  os << std::format("{} {} 0, 0, {}, {}\n", id_, resource_class(), width(), height());
   os << std::format("CAPTION \"{}\"\n", caption_);
 
   if (!style_.empty())
@@ -19,11 +28,11 @@ void dialogex::output(YGNodeConstRef node, std::ostream& os) const {
   os << std::format("FONT {}, \"{}\", {}, {}, {:#x}\n", font_size_, font_face_, font_weight_, font_italic_ ? 1 : 0, font_char_set_);
 
   os << "BEGIN\n";
-  output_children(node, os);
+  output_children(os);
   os << "END\n";
 }
 
-void dialogex::process_xaml(const pugi::xml_node& xaml, YGNodeRef node) {
+void dialogex::process_xaml(const pugi::xml_node& xaml) {
   auto title = xaml.attribute("Title");
   if (title)
     caption_ = title.value();
@@ -67,23 +76,5 @@ void dialogex::process_xaml(const pugi::xml_node& xaml, YGNodeRef node) {
 
   font_metrics::instance().initialise(font_face_.c_str(), font_size_, font_weight_, font_italic_, font_char_set_);
 
-  resource::process_xaml(xaml, node);
-}
-
-void dialogex::finalise_layout(YGNodeRef node) {
-  // add padding to the top
-  if (YGNodeStyleGetPadding(node, YGEdgeTop).unit == YGUnitUndefined)
-    YGNodeStyleSetPadding(node, YGEdgeTop, font_metrics::instance().dlu_to_dip_y(7));
-
-  // and to the left
-  if (YGNodeStyleGetPadding(node, YGEdgeLeft).unit == YGUnitUndefined)
-    YGNodeStyleSetPadding(node, YGEdgeLeft, font_metrics::instance().dlu_to_dip_y(7));
-
-  // and to the bottom
-  if (YGNodeStyleGetPadding(node, YGEdgeBottom).unit == YGUnitUndefined)
-    YGNodeStyleSetPadding(node, YGEdgeBottom, font_metrics::instance().dlu_to_dip_y(7));
-
-  // and to the right
-  if (YGNodeStyleGetPadding(node, YGEdgeRight).unit == YGUnitUndefined)
-    YGNodeStyleSetPadding(node, YGEdgeRight, font_metrics::instance().dlu_to_dip_y(7));
+  resource::process_xaml(xaml);
 }

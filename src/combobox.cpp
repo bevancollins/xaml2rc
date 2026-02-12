@@ -5,8 +5,8 @@ std::string_view combobox::resource_class() const {
   return "COMBOBOX";
 }
 
-void combobox::process_xaml(const pugi::xml_node& xaml, YGNodeRef node) {
-  widget::process_xaml(xaml, node);
+void combobox::process_xaml(const pugi::xml_node& xaml) {
+  widget::process_xaml(xaml);
 
   auto scrollbar_visibility = std::string_view{xaml.attribute("ScrollViewer.VerticalScrollBarVisibility").as_string("Visible")};
   if (scrollbar_visibility != "Disabled" && scrollbar_visibility != "Hidden")

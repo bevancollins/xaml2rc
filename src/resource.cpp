@@ -3,37 +3,36 @@
 #include <ranges>
 #include "fontmetrics.hpp"
 
-void resource::process_xaml(const pugi::xml_node& xaml, YGNodeRef node) {
+resource::resource(YGNodeRef node) :
+  node_(node) {
+  YGNodeSetContext(node, this);
+}
+
+void resource::process_xaml(const pugi::xml_node& xaml) {
   auto name = xaml.attribute("x:Name");
   if (name)
     id_ = name.value();
 
   auto height = xaml.attribute("Height");
   if (height)
-    YGNodeStyleSetHeight(node, height.as_float());
+    YGNodeStyleSetHeight(node_, height.as_float());
 
   auto width = xaml.attribute("Width");
   if (width)
-    YGNodeStyleSetWidth(node, width.as_float());
+    YGNodeStyleSetWidth(node_, width.as_float());
 
   auto margin = xaml.attribute("Margin");
   if (margin) {
     auto margin_sv = std::string_view{margin.value()};
     if (margin_sv.find_first_of(',') != std::string_view::npos) {
       auto margin_array = parse_quad(margin.value());
-      YGNodeStyleSetMargin(node, YGEdgeLeft,   margin_array[0]);
-      YGNodeStyleSetMargin(node, YGEdgeRight,  margin_array[1]);
-      YGNodeStyleSetMargin(node, YGEdgeTop,    margin_array[2]);
-      YGNodeStyleSetMargin(node, YGEdgeBottom, margin_array[3]);
+      YGNodeStyleSetMargin(node_, YGEdgeLeft,   margin_array[0]);
+      YGNodeStyleSetMargin(node_, YGEdgeRight,  margin_array[1]);
+      YGNodeStyleSetMargin(node_, YGEdgeTop,    margin_array[2]);
+      YGNodeStyleSetMargin(node_, YGEdgeBottom, margin_array[3]);
     } else {
-      YGNodeStyleSetMargin(node, YGEdgeAll, margin.as_float());
+      YGNodeStyleSetMargin(node_, YGEdgeAll, margin.as_float());
     }
-  } else {
-    // use defaults
-    YGNodeStyleSetMargin(node, YGEdgeLeft,   4);
-    YGNodeStyleSetMargin(node, YGEdgeRight,  4);
-    YGNodeStyleSetMargin(node, YGEdgeTop,    3);
-    YGNodeStyleSetMargin(node, YGEdgeBottom, 3);
   }
 
   auto padding = xaml.attribute("Padding");
@@ -41,12 +40,12 @@ void resource::process_xaml(const pugi::xml_node& xaml, YGNodeRef node) {
     auto padding_sv = std::string_view{padding.value()};
     if (padding_sv.find_first_of(',') != std::string_view::npos) {
       auto padding_array = parse_quad(padding.value());
-      YGNodeStyleSetPadding(node, YGEdgeLeft,   padding_array[0]);
-      YGNodeStyleSetPadding(node, YGEdgeRight,  padding_array[1]);
-      YGNodeStyleSetPadding(node, YGEdgeTop,    padding_array[2]);
-      YGNodeStyleSetPadding(node, YGEdgeBottom, padding_array[3]);
+      YGNodeStyleSetPadding(node_, YGEdgeLeft,   padding_array[0]);
+      YGNodeStyleSetPadding(node_, YGEdgeRight,  padding_array[1]);
+      YGNodeStyleSetPadding(node_, YGEdgeTop,    padding_array[2]);
+      YGNodeStyleSetPadding(node_, YGEdgeBottom, padding_array[3]);
     } else {
-      YGNodeStyleSetPadding(node, YGEdgeAll, padding.as_float());
+      YGNodeStyleSetPadding(node_, YGEdgeAll, padding.as_float());
     }
   }
 
@@ -59,19 +58,19 @@ void resource::process_xaml(const pugi::xml_node& xaml, YGNodeRef node) {
   // If both HorizontalAlignment and VerticalAlignment are present, the last one parsed will take precedence for AlignSelf.
   auto horizontal_alignment = xaml.attribute("HorizontalAlignment");
   if (horizontal_alignment)
-    YGNodeStyleSetAlignSelf(node, parse_align(horizontal_alignment.value()));
+    YGNodeStyleSetAlignSelf(node_, parse_align(horizontal_alignment.value()));
 
   auto vertical_alignment = xaml.attribute("VerticalAlignment");
   if (vertical_alignment)
-    YGNodeStyleSetAlignSelf(node, parse_align(vertical_alignment.value()));
+    YGNodeStyleSetAlignSelf(node_, parse_align(vertical_alignment.value()));
 }
 
-void resource::output(YGNodeConstRef node, std::ostream& os) const {
+void resource::output(std::ostream& os) const {
   auto cls = resource_class();
   if (cls.empty())
     return;
 
-  os << std::format("{} {}, {}, {}, {}, {}", cls, id_, x(node), y(node), width(node), height(node));
+  os << std::format("{} {}, {}, {}, {}, {}", cls, id_, x(), y(), width(), height());
 
   if (!style_.empty())
     os << std::format(", {}", style());
@@ -84,24 +83,24 @@ void resource::output(YGNodeConstRef node, std::ostream& os) const {
 
   os << "\n";
 
-  output_children(node, os);
+  output_children(os);
 }
 
-void resource::output_children(YGNodeConstRef node, std::ostream& os) const {
-  auto child_count = YGNodeGetChildCount(node);
+void resource::output_children(std::ostream& os) const {
+  auto child_count = YGNodeGetChildCount(node_);
   for (size_t i = 0; i < child_count; i++) {
-    auto child = YGNodeGetChild(const_cast<YGNodeRef>(node), i);
+    auto child = YGNodeGetChild(const_cast<YGNodeRef>(node_), i);
     auto context = reinterpret_cast<resource*>(YGNodeGetContext(child));
     if (context)
-      context->output(child, os);
+      context->output(os);
   }
 }
 
-void resource::measure([[maybe_unused]] YGNodeConstRef node, [[maybe_unused]] float& width, [[maybe_unused]] YGMeasureMode& width_mode, [[maybe_unused]] float& height, [[maybe_unused]] YGMeasureMode& height_mode) {
+void resource::measure([[maybe_unused]] float& width, [[maybe_unused]] YGMeasureMode& width_mode, [[maybe_unused]] float& height, [[maybe_unused]] YGMeasureMode& height_mode) {
 }
 
-std::string resource::x(YGNodeConstRef node) const {
-  auto n = const_cast<YGNodeRef>(node);
+std::string resource::x() const {
+  auto n = const_cast<YGNodeRef>(node_);
   float x{};
   while(n) {
     x += YGNodeLayoutGetLeft(n); // returns the relative left from parent
@@ -111,8 +110,8 @@ std::string resource::x(YGNodeConstRef node) const {
   return std::to_string(font_metrics::instance().dip_to_dlu_x(x));
 }
 
-std::string resource::y(YGNodeConstRef node) const {
-  auto n = const_cast<YGNodeRef>(node);
+std::string resource::y() const {
+  auto n = const_cast<YGNodeRef>(node_);
   float y{};
   while(n) {
     y += YGNodeLayoutGetTop(n); // returns the relative top from parent
@@ -122,12 +121,12 @@ std::string resource::y(YGNodeConstRef node) const {
   return std::to_string(font_metrics::instance().dip_to_dlu_y(y));
 }
 
-std::string resource::width(YGNodeConstRef node) const {
-  return std::to_string(font_metrics::instance().dip_to_dlu_x(YGNodeLayoutGetWidth(node)));
+std::string resource::width() const {
+  return std::to_string(font_metrics::instance().dip_to_dlu_x(YGNodeLayoutGetWidth(node_)));
 }
 
-std::string resource::height(YGNodeConstRef node) const {
-  return std::to_string(font_metrics::instance().dip_to_dlu_y(YGNodeLayoutGetHeight(node)));
+std::string resource::height() const {
+  return std::to_string(font_metrics::instance().dip_to_dlu_y(YGNodeLayoutGetHeight(node_)));
 }
 
 std::string resource::join_strings(const std::vector<std::string>& strings) const {
@@ -180,5 +179,5 @@ YGAlign resource::parse_align(std::string_view alignment) const {
     return YGAlignStretch;
 }
 
-void resource::finalise_layout([[maybe_unused]] YGNodeRef node) {
+void resource::finalise_layout() {
 }

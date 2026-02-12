@@ -2,12 +2,21 @@
 #include <format>
 #include "fontmetrics.hpp"
 
+groupbox::groupbox(YGNodeRef node) :
+  widget(node) {
+  // add padding
+  YGNodeStyleSetPadding(node_, YGEdgeTop, font_metrics::instance().dlu_to_dip_y(12));
+  YGNodeStyleSetPadding(node_, YGEdgeLeft, font_metrics::instance().dlu_to_dip_y(9));
+  YGNodeStyleSetPadding(node_, YGEdgeBottom, font_metrics::instance().dlu_to_dip_y(7));
+  YGNodeStyleSetPadding(node_, YGEdgeRight, font_metrics::instance().dlu_to_dip_y(7));
+}
+
 std::string_view groupbox::resource_class() const {
   return "GROUPBOX";
 }
 
-void groupbox::output(YGNodeConstRef node, std::ostream& os) const {
-  os << std::format("{} \"{}\", {}, {}, {}, {}, {}", resource_class(), header_, id_, x(node), y(node), width(node), height(node));
+void groupbox::output(std::ostream& os) const {
+  os << std::format("{} \"{}\", {}, {}, {}, {}, {}", resource_class(), header_, id_, x(), y(), width(), height());
 
   if (!style_.empty())
     os << std::format(", {}", style());
@@ -20,31 +29,13 @@ void groupbox::output(YGNodeConstRef node, std::ostream& os) const {
 
   os << "\n";
 
-  output_children(node, os);
+  output_children(os);
 }
 
-void groupbox::process_xaml(const pugi::xml_node& xaml, YGNodeRef node) {
-  widget::process_xaml(xaml, node);
+void groupbox::process_xaml(const pugi::xml_node& xaml) {
+  widget::process_xaml(xaml);
 
   auto header = xaml.attribute("Header");
   if (header)
     header_ = header.as_string();
-}
-
-void groupbox::finalise_layout(YGNodeRef node) {
-  // add padding to the top
-  if (YGNodeStyleGetPadding(node, YGEdgeTop).unit == YGUnitUndefined)
-    YGNodeStyleSetPadding(node, YGEdgeTop, font_metrics::instance().dlu_to_dip_y(12));
-
-  // and to the left
-  if (YGNodeStyleGetPadding(node, YGEdgeLeft).unit == YGUnitUndefined)
-    YGNodeStyleSetPadding(node, YGEdgeLeft, font_metrics::instance().dlu_to_dip_y(9));
-
-  // and to the bottom
-  if (YGNodeStyleGetPadding(node, YGEdgeBottom).unit == YGUnitUndefined)
-    YGNodeStyleSetPadding(node, YGEdgeBottom, font_metrics::instance().dlu_to_dip_y(7));
-
-  // and to the right
-  if (YGNodeStyleGetPadding(node, YGEdgeRight).unit == YGUnitUndefined)
-    YGNodeStyleSetPadding(node, YGEdgeRight, font_metrics::instance().dlu_to_dip_y(7));
 }

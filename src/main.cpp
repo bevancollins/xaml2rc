@@ -9,7 +9,7 @@
 void output(YGNodeRef node, std::ostream& os) {
   auto c = reinterpret_cast<resource*>(YGNodeGetContext(node));
   if (c)
-    c->output(node, os);
+    c->output(os);
 }
 
 int main(int argc, char** argv) {
