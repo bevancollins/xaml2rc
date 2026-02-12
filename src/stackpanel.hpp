@@ -1,12 +1,10 @@
 #pragma once
 
-#include "resource.hpp"
+#include "nodecontext.hpp"
 
-class stackpanel : public resource {
+class stackpanel : public nodecontext {
 public:
-  using resource::resource;
+  using nodecontext::nodecontext;
 
-  std::string_view resource_class() const override;
-  void output(std::ostream& os) const override;
   void process_xaml(const pugi::xml_node& xaml) override;
 };

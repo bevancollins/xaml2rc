@@ -20,6 +20,8 @@ add_executable(xaml2rc
   ltext.cpp
   ltext.hpp
   main.cpp
+  nodecontext.cpp
+  nodecontext.hpp
   pushbutton.cpp
   pushbutton.hpp
   radiobutton.cpp

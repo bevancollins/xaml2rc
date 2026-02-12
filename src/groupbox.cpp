@@ -29,7 +29,7 @@ void groupbox::output(std::ostream& os) const {
 
   os << "\n";
 
-  output_children(os);
+  nodecontext::output(os);
 }
 
 void groupbox::process_xaml(const pugi::xml_node& xaml) {

@@ -1,15 +1,7 @@
 #include "stackpanel.hpp"
 
-std::string_view stackpanel::resource_class() const {
-  return {};
-}
-
-void stackpanel::output(std::ostream& os) const {
-  output_children(os);
-}
-
 void stackpanel::process_xaml(const pugi::xml_node& xaml) {
-  resource::process_xaml(xaml);
+  nodecontext::process_xaml(xaml);
 
   std::string_view orientation          { xaml.attribute("Orientation").as_string("Vertical") };
   std::string_view vertical_alignment   { xaml.attribute("VerticalAlignment").as_string("Stretch") };

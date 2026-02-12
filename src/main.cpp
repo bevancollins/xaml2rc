@@ -4,10 +4,10 @@
 #include <fstream>
 #include <yoga/Yoga.h>
 #include "xamlimporter.hpp"
-#include "resource.hpp"
+#include "nodecontext.hpp"
 
 void output(YGNodeRef node, std::ostream& os) {
-  auto c = reinterpret_cast<resource*>(YGNodeGetContext(node));
+  auto c = reinterpret_cast<nodecontext*>(YGNodeGetContext(node));
   if (c)
     c->output(os);
 }

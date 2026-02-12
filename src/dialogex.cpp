@@ -28,7 +28,7 @@ void dialogex::output(std::ostream& os) const {
   os << std::format("FONT {}, \"{}\", {}, {}, {:#x}\n", font_size_, font_face_, font_weight_, font_italic_ ? 1 : 0, font_char_set_);
 
   os << "BEGIN\n";
-  output_children(os);
+  nodecontext::output(os);
   os << "END\n";
 }
 
