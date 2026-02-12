@@ -1,0 +1,7 @@
+IDD_ABOUTBOX DIALOGEX 0, 0, 200, 200
+CAPTION "EPX Builder - Targets"
+FONT 12, "Segoe UI", 400, 0, 0x1
+BEGIN
+LTEXT "Specify the executables to protect", -1, 7, 7, 186, 8, WS_TABSTOP
+LISTBOX -1, 7, 15, 186, 178, WS_TABSTOP
+END

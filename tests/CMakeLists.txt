@@ -15,3 +15,9 @@ add_output_test(
     alignment_test.xaml
     alignment_expected.rc
 )
+
+add_output_test(
+  GridTest
+    grid_test.xaml
+    grid_expected.rc
+)

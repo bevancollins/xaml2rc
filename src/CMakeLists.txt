@@ -15,6 +15,8 @@ add_executable(xaml2rc
   edittext.hpp
   fontmetrics.cpp
   fontmetrics.hpp
+  grid.cpp
+  grid.hpp
   groupbox.cpp
   groupbox.hpp
   listbox.cpp

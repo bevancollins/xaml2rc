@@ -6,6 +6,7 @@
 #include "combobox.hpp"
 #include "dialogex.hpp"
 #include "edittext.hpp"
+#include "grid.hpp"
 #include "groupbox.hpp"
 #include "listbox.hpp"
 #include "ltext.hpp"
@@ -29,6 +30,7 @@ YGNodeRef xamlimporter::import(const std::filesystem::path& path) {
 }
 
 bool xamlimporter::process_xaml(const pugi::xml_node& xaml, YGNodeRef node) {
+  bool is_grid = false;
   std::unique_ptr<nodecontext> context;
   std::string_view name{ xaml.name() };
   if (name == "Window")
@@ -41,7 +43,10 @@ bool xamlimporter::process_xaml(const pugi::xml_node& xaml, YGNodeRef node) {
     context = std::make_unique<checkbox>(node);
   else if (name == "ComboBox")
     context = std::make_unique<combobox>(node);
-  else if (name == "GroupBox")
+  else if (name == "Grid") {
+    context = std::make_unique<grid>(node);
+    is_grid = true;
+  } else if (name == "GroupBox")
     context = std::make_unique<groupbox>(node);
   else if (name == "ListBox")
     context = std::make_unique<listbox>(node);
@@ -52,23 +57,36 @@ bool xamlimporter::process_xaml(const pugi::xml_node& xaml, YGNodeRef node) {
   else if (name == "TextBox")
     context = std::make_unique<edittext>(node);
   else {
-    std::cerr << std::format("unrecognised tag: {}\n", name);
+    // grid elements are parsed by grid class
+    if (name != "Grid.RowDefinitions" && name != "Grid.ColumnDefinitions" &&
+        name != "RowDefinition" && name != "ColumnDefinition")
+      std::cerr << std::format("unrecognised tag: {}\n", name);
     return false;
   }
 
   context->process_xaml(xaml);
-  contexts_.push_back(std::move(context));
 
-  for (auto& xml_node_child : xaml.children()) {
-    auto child = YGNodeNew();
+  for (auto& xaml_child : xaml.children()) {
+    // if xaml_child has Grid.Row or Grid.Column then lookup the grid cell
+    auto grid_row = xaml_child.attribute("Grid.Row");
+    auto grid_column = xaml_child.attribute("Grid.Column");
+    if (is_grid && (grid_row || grid_column)) {
+      auto grid_context = reinterpret_cast<grid*>(context.get());
+      auto grid_cell = grid_context->get_cell(grid_row.as_uint(0), grid_column.as_uint(0));
 
-    if (process_xaml(xml_node_child, child)) {
-      auto child_index = YGNodeGetChildCount(node);
-      YGNodeInsertChild(node, child, child_index);
+      process_xaml(xaml_child, grid_cell);
     } else {
-      YGNodeFree(child);
+      auto child = YGNodeNew();
+      if (process_xaml(xaml_child, child)) {
+        auto child_index = YGNodeGetChildCount(node);
+        YGNodeInsertChild(node, child, child_index);
+      } else {
+        YGNodeFree(child);
+      }
     }
   }
+
+  contexts_.push_back(std::move(context));
 
   return true;
 }
