@@ -1,4 +1,5 @@
 #include "xamlimporter.hpp"
+#include <iostream>
 #include <string_view>
 #include <yoga/Yoga.h>
 #include "checkbox.hpp"
@@ -12,24 +13,24 @@
 #include "radiobutton.hpp"
 #include "stackpanel.hpp"
 
-using namespace std::string_view_literals;
-
-std::tuple<YGNodeRef, std::vector<std::unique_ptr<nodecontext>>> xamlimporter::import(const std::filesystem::path& path) {
+YGNodeRef xamlimporter::import(const std::filesystem::path& path) {
   pugi::xml_document doc;
   auto result = doc.load_file(path.c_str());
   if (!result)
     throw std::runtime_error(result.description());
 
   auto root_node = YGNodeNew();
-  std::vector<std::unique_ptr<nodecontext>> contexts;
-  process_xaml(doc.document_element(), root_node, contexts);
-
+  if (!process_xaml(doc.document_element(), root_node)) {
+    YGNodeFree(root_node);
+    throw std::runtime_error("xaml parsing failed");
+  }
+  
   finalise_layout(root_node);
 
-  return std::make_tuple(root_node, std::move(contexts));
+  return root_node;
 }
 
-bool xamlimporter::process_xaml(const pugi::xml_node& xaml, YGNodeRef node, std::vector<std::unique_ptr<nodecontext>>& contexts) {
+bool xamlimporter::process_xaml(const pugi::xml_node& xaml, YGNodeRef node) {
   bool is_resource = true;
   std::unique_ptr<nodecontext> context;
   std::string_view name{ xaml.name() };
@@ -54,16 +55,18 @@ bool xamlimporter::process_xaml(const pugi::xml_node& xaml, YGNodeRef node, std:
     context = std::make_unique<radiobutton>(node);
   else if (name == "TextBox")
     context = std::make_unique<edittext>(node);
-  else
+  else {
+    std::cerr << std::format("unrecognised tag: {}\n", name);
     return false;
+  }
 
   context->process_xaml(xaml);
-  contexts.push_back(std::move(context));
+  contexts_.push_back(std::move(context));
 
   for (auto& xml_node_child : xaml.children()) {
     auto child = YGNodeNew();
 
-    if (process_xaml(xml_node_child, child, contexts)) {
+    if (process_xaml(xml_node_child, child)) {
       auto child_index = YGNodeGetChildCount(node);
       YGNodeInsertChild(node, child, child_index);
     } else {

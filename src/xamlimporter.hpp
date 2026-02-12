@@ -8,9 +8,11 @@
 
 class xamlimporter {
 public:
-  std::tuple<YGNodeRef, std::vector<std::unique_ptr<nodecontext>>> import(const std::filesystem::path& path);
+  YGNodeRef import(const std::filesystem::path& path);
 
 private:
-  bool process_xaml(const pugi::xml_node& xaml, YGNodeRef node, std::vector<std::unique_ptr<nodecontext>>& contexts);
+  bool process_xaml(const pugi::xml_node& xaml, YGNodeRef node);
   void finalise_layout(YGNodeRef node);
+
+  std::vector<std::unique_ptr<nodecontext>> contexts_;
 };

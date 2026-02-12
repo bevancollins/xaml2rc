@@ -1,4 +1,3 @@
-#include <cstdlib>
 #include <iostream>
 #include <ostream>
 #include <fstream>
@@ -6,16 +5,10 @@
 #include "xamlimporter.hpp"
 #include "nodecontext.hpp"
 
-void output(YGNodeRef node, std::ostream& os) {
-  auto c = reinterpret_cast<nodecontext*>(YGNodeGetContext(node));
-  if (c)
-    c->output(os);
-}
-
 int main(int argc, char** argv) {
   try {
     xamlimporter importer;
-    auto [root, resources] = importer.import(argv[1]);
+    auto root = importer.import(argv[1]);
 
     YGNodeCalculateLayout(root, YGUndefined, YGUndefined, YGDirectionLTR);
 
@@ -28,7 +21,10 @@ int main(int argc, char** argv) {
     } else {
       out = &std::cout;
     }
-    output(root, *out);
+
+    auto context = reinterpret_cast<nodecontext*>(YGNodeGetContext(root));
+    if (context)
+      context->output(*out);
 
     return EXIT_SUCCESS;
 
