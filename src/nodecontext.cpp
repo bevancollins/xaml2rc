@@ -101,6 +101,3 @@ YGAlign nodecontext::parse_align(std::string_view alignment) const {
   else
     return YGAlignStretch;
 }
-
-void nodecontext::finalise_layout() {
-}

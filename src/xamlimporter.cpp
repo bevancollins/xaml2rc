@@ -25,8 +25,6 @@ YGNodeRef xamlimporter::import(const std::filesystem::path& path) {
     throw std::runtime_error("xaml parsing failed");
   }
   
-  finalise_layout(root_node);
-
   return root_node;
 }
 
@@ -96,14 +94,4 @@ bool xamlimporter::process_xaml(const pugi::xml_node& xaml, YGNodeRef node) {
   }
 
   return true;
-}
-
-void xamlimporter::finalise_layout(YGNodeRef node) {
-  auto child_count = YGNodeGetChildCount(node);
-  for (size_t i = 0; i < child_count; i++)
-    finalise_layout(YGNodeGetChild(node, i));
-
-  auto context = reinterpret_cast<nodecontext*>(YGNodeGetContext(node));
-  if (context)
-    context->finalise_layout();
 }

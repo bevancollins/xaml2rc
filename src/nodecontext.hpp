@@ -12,7 +12,6 @@ public:
 
   virtual void output(std::ostream& os) const;
   virtual void process_xaml(const pugi::xml_node& xaml);
-  virtual void finalise_layout();
 
 protected:
   std::array<int, 4> parse_quad(std::string_view input);
