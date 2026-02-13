@@ -56,12 +56,18 @@ void nodecontext::process_xaml(const pugi::xml_node& xaml) {
 }
 
 void nodecontext::output(std::ostream& os) const {
-  auto child_count = YGNodeGetChildCount(node_);
+  output_children(node_, os);
+}
+
+void nodecontext::output_children(YGNodeRef node, std::ostream& os) {
+  auto child_count = YGNodeGetChildCount(node);
   for (size_t i = 0; i < child_count; i++) {
-    auto child = YGNodeGetChild(const_cast<YGNodeRef>(node_), i);
+    auto child = YGNodeGetChild(const_cast<YGNodeRef>(node), i);
     auto context = reinterpret_cast<nodecontext*>(YGNodeGetContext(child));
     if (context)
       context->output(os);
+    else
+      output_children(child, os);
   }
 }
 

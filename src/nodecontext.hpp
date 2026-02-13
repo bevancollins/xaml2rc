@@ -14,6 +14,8 @@ public:
   virtual void process_xaml(const pugi::xml_node& xaml);
 
 protected:
+  static void output_children(YGNodeRef node, std::ostream& os);
+
   std::array<int, 4> parse_quad(std::string_view input);
   YGJustify parse_justify(std::string_view alignment) const;
   YGAlign parse_align(std::string_view alignment) const;
