@@ -7,6 +7,8 @@ add_executable(xaml2rc
   checkbox.hpp
   combobox.cpp
   combobox.hpp
+  debugoutput.cpp
+  debugoutput.hpp
   dialogex.cpp
   dialogex.hpp
   edittext.cpp
@@ -22,12 +24,17 @@ add_executable(xaml2rc
   main.cpp
   nodecontext.cpp
   nodecontext.hpp
+  outputformat.hpp
+  playgroundoutput.cpp
+  playgroundoutput.hpp
   pushbutton.cpp
   pushbutton.hpp
   radiobutton.cpp
   radiobutton.hpp
   resource.cpp
   resource.hpp
+  resourcescriptoutput.cpp
+  resourcescriptoutput.hpp
   stackpanel.cpp
   stackpanel.hpp
   textwidget.cpp
