@@ -2,15 +2,6 @@
 #include <format>
 #include "fontmetrics.hpp"
 
-dialogex::dialogex(YGNodeRef node) :
-  resource(node) {
-  // add padding
-  YGNodeStyleSetPadding(node_, YGEdgeTop, font_metrics::instance().dlu_to_dip_y(7));
-  YGNodeStyleSetPadding(node_, YGEdgeLeft, font_metrics::instance().dlu_to_dip_x(7));
-  YGNodeStyleSetPadding(node_, YGEdgeBottom, font_metrics::instance().dlu_to_dip_y(7));
-  YGNodeStyleSetPadding(node_, YGEdgeRight, font_metrics::instance().dlu_to_dip_x(7));
-}
-
 std::string_view dialogex::resource_class() const {
   return "DIALOGEX";
 }
@@ -75,6 +66,11 @@ void dialogex::process_xaml(const pugi::xml_node& xaml) {
     extended_style_.push_back("WS_EX_TOPMOST");
 
   font_metrics::instance().initialise(font_face_.c_str(), font_size_, font_weight_, font_italic_, font_char_set_);
+
+  YGNodeStyleSetPadding(node_, YGEdgeTop, font_metrics::instance().dlu_to_dip_y(7));
+  YGNodeStyleSetPadding(node_, YGEdgeLeft, font_metrics::instance().dlu_to_dip_x(7));
+  YGNodeStyleSetPadding(node_, YGEdgeBottom, font_metrics::instance().dlu_to_dip_y(7));
+  YGNodeStyleSetPadding(node_, YGEdgeRight, font_metrics::instance().dlu_to_dip_x(7));
 
   resource::process_xaml(xaml);
 }

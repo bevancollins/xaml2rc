@@ -6,7 +6,7 @@
 
 class dialogex : public resource {
 public:
-  dialogex(YGNodeRef node);
+  using resource::resource;
 
   std::string_view resource_class() const override;
   void output(std::ostream& os) const override;
