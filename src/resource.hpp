@@ -14,7 +14,6 @@ public:
   void output(std::ostream& os) const override;
 
   virtual std::string_view resource_class() const = 0;
-  virtual void measure(float& width, YGMeasureMode& width_mode, float& height, YGMeasureMode& height_mode);
 
 protected:
   std::string x() const;

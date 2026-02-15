@@ -36,9 +36,6 @@ void resource::output(std::ostream& os) const {
   nodecontext::output(os);
 }
 
-void resource::measure([[maybe_unused]] float& width, [[maybe_unused]] YGMeasureMode& width_mode, [[maybe_unused]] float& height, [[maybe_unused]] YGMeasureMode& height_mode) {
-}
-
 std::string resource::x() const {
   auto n = const_cast<YGNodeRef>(node_);
   float x{};

@@ -29,15 +29,13 @@ YGNodeRef xamlimporter::import(const std::filesystem::path& path) {
 }
 
 bool xamlimporter::process_xaml(const pugi::xml_node& xaml, YGNodeRef node) {
-  bool is_resource = true;
   std::unique_ptr<nodecontext> context;
   std::string_view name{ xaml.name() };
   if (name == "Window")
     context = std::make_unique<dialogex>(node);
-  else if (name == "StackPanel") {
+  else if (name == "StackPanel")
     context = std::make_unique<stackpanel>(node);
-    is_resource = false;
-  } else if (name == "Button")
+  else if (name == "Button")
     context = std::make_unique<pushbutton>(node);
   else if (name == "CheckBox")
     context = std::make_unique<checkbox>(node);
@@ -70,27 +68,6 @@ bool xamlimporter::process_xaml(const pugi::xml_node& xaml, YGNodeRef node) {
     } else {
       YGNodeFree(child);
     }
-  }
-
-  // nodes with children can't have a measure function
-  if (is_resource) {
-    auto child_count = YGNodeGetChildCount(node);
-    if (!child_count)
-      YGNodeSetMeasureFunc(node, [](
-            YGNodeConstRef node,
-            float width,
-            YGMeasureMode width_mode,
-            float height,
-            YGMeasureMode height_mode)->YGSize {
-          auto context = reinterpret_cast<nodecontext*>(YGNodeGetContext(node));
-          if (context) {
-            auto r = dynamic_cast<resource*>(context);
-            if (r)
-              r->measure(width, width_mode, height, height_mode);
-          }
-          return {width, height};
-        }
-      );
   }
 
   return true;
