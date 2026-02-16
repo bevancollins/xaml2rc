@@ -1,9 +1,9 @@
 #pragma once
 
-#include "widget.hpp"
+#include "resource.hpp"
 #include <string>
 
-class groupbox : public widget {
+class groupbox : public resource {
 public:
   groupbox(YGNodeRef node);
 

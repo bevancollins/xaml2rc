@@ -33,7 +33,7 @@ void groupbox::output(std::ostream& os) const {
 }
 
 void groupbox::process_xaml(const pugi::xml_node& xaml) {
-  widget::process_xaml(xaml);
+  resource::process_xaml(xaml);
 
   auto header = xaml.attribute("Header");
   if (header)
