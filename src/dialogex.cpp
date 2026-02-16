@@ -72,5 +72,8 @@ void dialogex::process_xaml(const pugi::xml_node& xaml) {
   YGNodeStyleSetPadding(node_, YGEdgeBottom, font_metrics::instance().dlu_to_dip_y(7));
   YGNodeStyleSetPadding(node_, YGEdgeRight, font_metrics::instance().dlu_to_dip_x(7));
 
+  YGNodeStyleSetGap(node_, YGGutterRow, font_metrics::instance().dlu_to_dip_x(4));
+  YGNodeStyleSetGap(node_, YGGutterColumn, font_metrics::instance().dlu_to_dip_x(4));
+
   resource::process_xaml(xaml);
 }

@@ -2,15 +2,6 @@
 #include <format>
 #include "fontmetrics.hpp"
 
-groupbox::groupbox(YGNodeRef node) :
-  widget(node) {
-  // add padding
-  YGNodeStyleSetPadding(node_, YGEdgeTop, font_metrics::instance().dlu_to_dip_y(12));
-  YGNodeStyleSetPadding(node_, YGEdgeLeft, font_metrics::instance().dlu_to_dip_y(9));
-  YGNodeStyleSetPadding(node_, YGEdgeBottom, font_metrics::instance().dlu_to_dip_y(7));
-  YGNodeStyleSetPadding(node_, YGEdgeRight, font_metrics::instance().dlu_to_dip_y(7));
-}
-
 std::string_view groupbox::resource_class() const {
   return "GROUPBOX";
 }
@@ -33,6 +24,14 @@ void groupbox::output(std::ostream& os) const {
 }
 
 void groupbox::process_xaml(const pugi::xml_node& xaml) {
+  YGNodeStyleSetGap(node_, YGGutterRow, font_metrics::instance().dlu_to_dip_x(4));
+  YGNodeStyleSetGap(node_, YGGutterColumn, font_metrics::instance().dlu_to_dip_x(4));
+
+  YGNodeStyleSetPadding(node_, YGEdgeTop, font_metrics::instance().dlu_to_dip_y(12));
+  YGNodeStyleSetPadding(node_, YGEdgeLeft, font_metrics::instance().dlu_to_dip_y(9));
+  YGNodeStyleSetPadding(node_, YGEdgeBottom, font_metrics::instance().dlu_to_dip_y(7));
+  YGNodeStyleSetPadding(node_, YGEdgeRight, font_metrics::instance().dlu_to_dip_y(7));
+
   resource::process_xaml(xaml);
 
   auto header = xaml.attribute("Header");

@@ -5,7 +5,7 @@
 
 class groupbox : public resource {
 public:
-  groupbox(YGNodeRef node);
+  using resource::resource;
 
   std::string_view resource_class() const override;
   virtual void output(std::ostream& os) const override;

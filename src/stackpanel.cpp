@@ -1,6 +1,10 @@
 #include "stackpanel.hpp"
+#include "fontmetrics.hpp"
 
 void stackpanel::process_xaml(const pugi::xml_node& xaml) {
+  YGNodeStyleSetGap(node_, YGGutterRow, font_metrics::instance().dlu_to_dip_x(4));
+  YGNodeStyleSetGap(node_, YGGutterColumn, font_metrics::instance().dlu_to_dip_x(4));
+
   nodecontext::process_xaml(xaml);
 
   std::string_view orientation          { xaml.attribute("Orientation").as_string("Vertical") };
