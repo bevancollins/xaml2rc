@@ -4,7 +4,7 @@
 
 class edittext : public widget {
 public:
-  using widget::widget;
+  edittext(YGNodeRef node);
 
   std::string_view resource_class() const override;
 };

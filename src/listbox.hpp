@@ -4,7 +4,7 @@
 
 class listbox : public widget {
 public:
-  using widget::widget;
+  listbox(YGNodeRef node);
 
   std::string_view resource_class() const override;
 };
