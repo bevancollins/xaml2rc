@@ -1,7 +1,6 @@
 #include "resource.hpp"
 #include <format>
 #include <ranges>
-#include "fontmetrics.hpp"
 
 void resource::process_xaml(const pugi::xml_node& xaml) {
   nodecontext::process_xaml(xaml);
@@ -44,7 +43,7 @@ std::string resource::x() const {
     n = YGNodeGetParent(n);
   }
 
-  return std::to_string(font_metrics::instance().dip_to_dlu_x(x));
+  return std::to_string(std::lround(x));
 }
 
 std::string resource::y() const {
@@ -55,15 +54,15 @@ std::string resource::y() const {
     n = YGNodeGetParent(n);
   }
 
-  return std::to_string(font_metrics::instance().dip_to_dlu_y(y));
+  return std::to_string(std::lround(y));
 }
 
 std::string resource::width() const {
-  return std::to_string(font_metrics::instance().dip_to_dlu_x(YGNodeLayoutGetWidth(node_)));
+  return std::to_string(std::lround(YGNodeLayoutGetWidth(node_)));
 }
 
 std::string resource::height() const {
-  return std::to_string(font_metrics::instance().dip_to_dlu_y(YGNodeLayoutGetHeight(node_)));
+  return std::to_string(std::lround(YGNodeLayoutGetHeight(node_)));
 }
 
 std::string resource::join_strings(const std::vector<std::string>& strings) const {

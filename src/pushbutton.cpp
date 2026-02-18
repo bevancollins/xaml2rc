@@ -1,9 +1,8 @@
 #include "pushbutton.hpp"
-#include "fontmetrics.hpp"
 
 pushbutton::pushbutton(YGNodeRef node) :
   text_widget(node) {
-  YGNodeStyleSetHeight(node_, font_metrics::instance().dlu_to_dip_y(14));
+  YGNodeStyleSetHeight(node_, 14.0f);
 }
 
 std::string_view pushbutton::resource_class() const {

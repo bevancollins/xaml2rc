@@ -1,5 +1,6 @@
 #include "nodecontext.hpp"
 #include <ranges>
+#include "fontmetrics.hpp"
 
 nodecontext::nodecontext(YGNodeRef node) :
   node_(node) {
@@ -9,23 +10,29 @@ nodecontext::nodecontext(YGNodeRef node) :
 void nodecontext::process_xaml(const pugi::xml_node& xaml) {
   auto height = xaml.attribute("Height");
   if (height)
-    YGNodeStyleSetHeight(node_, height.as_float());
+    YGNodeStyleSetHeight(node_, font_metrics::instance().dip_to_dlu_y(height.as_float()));
 
   auto width = xaml.attribute("Width");
   if (width)
-    YGNodeStyleSetWidth(node_, width.as_float());
+    YGNodeStyleSetWidth(node_, font_metrics::instance().dip_to_dlu_x(width.as_float()));
 
   auto margin = xaml.attribute("Margin");
   if (margin) {
     auto margin_sv = std::string_view{margin.value()};
     if (margin_sv.find_first_of(',') != std::string_view::npos) {
       auto margin_array = parse_quad(margin.value());
-      YGNodeStyleSetMargin(node_, YGEdgeLeft,   margin_array[0]);
-      YGNodeStyleSetMargin(node_, YGEdgeRight,  margin_array[1]);
-      YGNodeStyleSetMargin(node_, YGEdgeTop,    margin_array[2]);
-      YGNodeStyleSetMargin(node_, YGEdgeBottom, margin_array[3]);
+      YGNodeStyleSetMargin(node_, YGEdgeLeft,   font_metrics::instance().dip_to_dlu_x(margin_array[0]));
+      YGNodeStyleSetMargin(node_, YGEdgeRight,  font_metrics::instance().dip_to_dlu_x(margin_array[1]));
+      YGNodeStyleSetMargin(node_, YGEdgeTop,    font_metrics::instance().dip_to_dlu_y(margin_array[2]));
+      YGNodeStyleSetMargin(node_, YGEdgeBottom, font_metrics::instance().dip_to_dlu_y(margin_array[3]));
     } else {
-      YGNodeStyleSetMargin(node_, YGEdgeAll, margin.as_float());
+      auto margin_x = font_metrics::instance().dip_to_dlu_x(margin.as_float());
+      auto margin_y = font_metrics::instance().dip_to_dlu_y(margin.as_float());
+
+      YGNodeStyleSetMargin(node_, YGEdgeLeft,   margin_x);
+      YGNodeStyleSetMargin(node_, YGEdgeRight,  margin_x);
+      YGNodeStyleSetMargin(node_, YGEdgeTop,    margin_y);
+      YGNodeStyleSetMargin(node_, YGEdgeBottom, margin_y);
     }
   }
 
@@ -34,12 +41,18 @@ void nodecontext::process_xaml(const pugi::xml_node& xaml) {
     auto padding_sv = std::string_view{padding.value()};
     if (padding_sv.find_first_of(',') != std::string_view::npos) {
       auto padding_array = parse_quad(padding.value());
-      YGNodeStyleSetPadding(node_, YGEdgeLeft,   padding_array[0]);
-      YGNodeStyleSetPadding(node_, YGEdgeRight,  padding_array[1]);
-      YGNodeStyleSetPadding(node_, YGEdgeTop,    padding_array[2]);
-      YGNodeStyleSetPadding(node_, YGEdgeBottom, padding_array[3]);
+      YGNodeStyleSetPadding(node_, YGEdgeLeft,   font_metrics::instance().dip_to_dlu_x(padding_array[0]));
+      YGNodeStyleSetPadding(node_, YGEdgeRight,  font_metrics::instance().dip_to_dlu_x(padding_array[1]));
+      YGNodeStyleSetPadding(node_, YGEdgeTop,    font_metrics::instance().dip_to_dlu_y(padding_array[2]));
+      YGNodeStyleSetPadding(node_, YGEdgeBottom, font_metrics::instance().dip_to_dlu_y(padding_array[3]));
     } else {
-      YGNodeStyleSetPadding(node_, YGEdgeAll, padding.as_float());
+      auto padding_x = font_metrics::instance().dip_to_dlu_x(padding.as_float());
+      auto padding_y = font_metrics::instance().dip_to_dlu_y(padding.as_float());
+
+      YGNodeStyleSetPadding(node_, YGEdgeLeft,   padding_x);
+      YGNodeStyleSetPadding(node_, YGEdgeRight,  padding_x);
+      YGNodeStyleSetPadding(node_, YGEdgeTop,    padding_y);
+      YGNodeStyleSetPadding(node_, YGEdgeBottom, padding_y);
     }
   }
 

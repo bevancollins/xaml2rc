@@ -2,6 +2,7 @@
 #include <cassert>
 #include <string_view>
 #include <vector>
+#include <iostream>
 
 void grid::process_xaml(const pugi::xml_node& xaml) {
   nodecontext::process_xaml(xaml);
@@ -31,13 +32,15 @@ void grid::process_xaml(const pugi::xml_node& xaml) {
   columns_ = column_lengths.size();
 
   // ensure at least 1 row and 1 column
-  if (row_lengths.empty())
-    rows_++;
-  if (column_lengths.empty())
-    columns_++;
+  if (!rows_) rows_ = 1;
+  if (!columns_) columns_ = 1;
 
-  YGNodeStyleSetFlexDirection(node_, YGFlexDirectionColumn);
-  YGNodeStyleSetFlexGrow(node_, 1.0f);
+  if (row_lengths.size() > column_lengths.size())
+    YGNodeStyleSetFlexDirection(node_, YGFlexDirectionColumn);
+  else
+    YGNodeStyleSetFlexDirection(node_, YGFlexDirectionRow);
+
+//  YGNodeStyleSetFlexGrow(node_, 1.0f);
 
   for (size_t row = 0; row < rows_; row++) {
     for (size_t column = 0; column < columns_; column++) {

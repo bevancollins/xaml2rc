@@ -31,10 +31,10 @@ void playground_output::print_node(YGNodeRef node, std::ostream& out, int indent
     out << std::format("flexWrap: '{}', ", YGWrapToString(YGNodeStyleGetFlexWrap(node)));
 
   // Flex properties
-  if (YGNodeStyleGetFlexGrow(node) != 0)
+  if (YGNodeStyleGetFlexGrow(node) != 0.0f)
     out << std::format("flexGrow: {}, ", YGNodeStyleGetFlexGrow(node));
 
-  if (YGNodeStyleGetFlexShrink(node) != 1)
+  if (YGNodeStyleGetFlexShrink(node) != 1.0f)
     out << std::format("flexShrink: {}, ", YGNodeStyleGetFlexShrink(node));
 
   YGValue flexBasis = YGNodeStyleGetFlexBasis(node);

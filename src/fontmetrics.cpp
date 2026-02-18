@@ -59,7 +59,7 @@ float font_metrics::dlu_to_dip_y(int y) const {
   return y * base_unit_y_ / 8.0f;
 }
 
-float font_metrics::measure_text_width_dip(std::string_view text) const {
+float font_metrics::measure_text_width(std::string_view text) const {
   wil::unique_hdc hdc { CreateCompatibleDC(nullptr) };
   if (!hdc)
     throw std::system_error(GetLastError(), std::system_category());
@@ -70,6 +70,6 @@ float font_metrics::measure_text_width_dip(std::string_view text) const {
   if (!GetTextExtentPoint32A(hdc.get(), text.data(), static_cast<int>(text.length()), &size))
     throw std::system_error(GetLastError(), std::system_category());
 
-  // Convert pixels to DIPs (1 DIP = 1/96th inch)
-  return static_cast<float>(size.cx) * 96.0f / static_cast<float>(dpi_x_);
+  // Convert pixels to DLU
+  return size.cx * 4.0f / base_unit_x_;
 }

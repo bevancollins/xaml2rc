@@ -1,5 +1,4 @@
 #include "widget.hpp"
-#include <algorithm>
 
 void widget::process_xaml(const pugi::xml_node& xaml) {
   resource::process_xaml(xaml);

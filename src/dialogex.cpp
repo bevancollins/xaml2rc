@@ -67,13 +67,13 @@ void dialogex::process_xaml(const pugi::xml_node& xaml) {
 
   font_metrics::instance().initialise(font_face_.c_str(), font_size_, font_weight_, font_italic_, font_char_set_);
 
-  YGNodeStyleSetPadding(node_, YGEdgeTop, font_metrics::instance().dlu_to_dip_y(7));
-  YGNodeStyleSetPadding(node_, YGEdgeLeft, font_metrics::instance().dlu_to_dip_x(7));
-  YGNodeStyleSetPadding(node_, YGEdgeBottom, font_metrics::instance().dlu_to_dip_y(7));
-  YGNodeStyleSetPadding(node_, YGEdgeRight, font_metrics::instance().dlu_to_dip_x(7));
+  YGNodeStyleSetPadding(node_, YGEdgeTop,    7.0f);
+  YGNodeStyleSetPadding(node_, YGEdgeLeft,   7.0f);
+  YGNodeStyleSetPadding(node_, YGEdgeBottom, 7.0f);
+  YGNodeStyleSetPadding(node_, YGEdgeRight,  7.0f);
 
-  YGNodeStyleSetGap(node_, YGGutterRow, font_metrics::instance().dlu_to_dip_x(4));
-  YGNodeStyleSetGap(node_, YGGutterColumn, font_metrics::instance().dlu_to_dip_x(4));
+  YGNodeStyleSetGap(node_, YGGutterRow,    4.0f);
+  YGNodeStyleSetGap(node_, YGGutterColumn, 4.0f);
 
   resource::process_xaml(xaml);
 }

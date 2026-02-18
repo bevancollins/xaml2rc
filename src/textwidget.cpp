@@ -1,5 +1,4 @@
 #include "textwidget.hpp"
-#include <algorithm>
 #include <format>
 #include "fontmetrics.hpp"
 
@@ -26,5 +25,5 @@ void text_widget::process_xaml(const pugi::xml_node& xaml) {
     text_ = content.value();
 
   // Calculate intrinsic width based on text
-  YGNodeStyleSetMinWidth(node_, font_metrics::instance().measure_text_width_dip(text_));
+  YGNodeStyleSetMinWidth(node_, font_metrics::instance().measure_text_width(text_));
 }

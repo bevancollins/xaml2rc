@@ -1,6 +1,5 @@
 #include "groupbox.hpp"
 #include <format>
-#include "fontmetrics.hpp"
 
 std::string_view groupbox::resource_class() const {
   return "GROUPBOX";
@@ -24,13 +23,13 @@ void groupbox::output(std::ostream& os) const {
 }
 
 void groupbox::process_xaml(const pugi::xml_node& xaml) {
-  YGNodeStyleSetGap(node_, YGGutterRow, font_metrics::instance().dlu_to_dip_x(4));
-  YGNodeStyleSetGap(node_, YGGutterColumn, font_metrics::instance().dlu_to_dip_x(4));
+  YGNodeStyleSetGap(node_, YGGutterRow,    4.0f);
+  YGNodeStyleSetGap(node_, YGGutterColumn, 4.0f);
 
-  YGNodeStyleSetPadding(node_, YGEdgeTop, font_metrics::instance().dlu_to_dip_y(12));
-  YGNodeStyleSetPadding(node_, YGEdgeLeft, font_metrics::instance().dlu_to_dip_y(9));
-  YGNodeStyleSetPadding(node_, YGEdgeBottom, font_metrics::instance().dlu_to_dip_y(7));
-  YGNodeStyleSetPadding(node_, YGEdgeRight, font_metrics::instance().dlu_to_dip_y(7));
+  YGNodeStyleSetPadding(node_, YGEdgeTop,   12.0f);
+  YGNodeStyleSetPadding(node_, YGEdgeLeft,   9.0f);
+  YGNodeStyleSetPadding(node_, YGEdgeBottom, 7.0f);
+  YGNodeStyleSetPadding(node_, YGEdgeRight,  7.0f);
 
   resource::process_xaml(xaml);
 
